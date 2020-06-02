@@ -1,0 +1,8 @@
+{
+  "tslint.jsEnable": false,
+  "tslint.alwaysShowRuleFailuresAsWarnings": true,
+  "tslint.ignoreDefinitionFiles": false,
+  "tslint.suppressWhileTypeErrorsPresent": false,
+  "tslint.packageManager": "yarn",
+  "tslint.autoFixOnSave": true
+}
