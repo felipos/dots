@@ -1,0 +1,25 @@
+#!/bin/bash
+
+SSH_HOST=$1
+MOUNTING_DIR=$2
+SSH_HOSTPATH=$3
+SCRIPT_TITLE=$4
+
+mount_fs() {
+  has_connection=$(ssh $SSH_HOST ls)
+
+  [ "$?" -ne 0 ] && notify-send "${SCRIPT_TITLE}" "Device unreachable. Check ssh connection" && exit
+
+  [ ! -d "$MOUNTING_DIR" ] && notify-send "${SCRIPT_TITLE}" "Mounting directory was not found" && exit
+
+  sshfs $SSH_HOST:$SSH_HOSTPATH $MOUNTING_DIR \
+      && notify-send "${SCRIPT_TITLE}" "Device filesystem mounted in $MOUNTING_DIR"
+}
+
+umount_fs() {
+  fusermount3 -u $MOUNTING_DIR && notify-send "${SCRIPT_TITLE}" "Device filesystem unmounted from $MOUNTING_DIR"
+}
+
+choose=$(echo -e "Mount\nUmount" | dmenu -p "${SCRIPT_TITLE}")
+
+[ "$choose" == "Mount" ] && mount_fs || umount_fs

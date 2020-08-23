@@ -1,0 +1,9 @@
+#!/bin/sh
+
+case $BUTTON in
+	1) notify-send -t 10000 "This Month" "$(cal --color=always | sed "s/..7m/<b><span color=\"blue\">/;s/..27m/<\/span><\/b>/")" && notify-send -t 10000 "Appointments" "$(calcurse -D ~/.calcurse -d3)" ;;
+	2) setsid -f "$TERMINAL" -e calcurse ;;
+	3) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+echo "  $(date '+%a, %d  %R') "

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+case $BUTTON in
+	2) setsid -f "$TERMINAL" -e alsamixer ;;
+	3) "$TERMINAL" -e "$EDITOR" "$0" ;;
+	4) volume raise | pkill -RTMIN+11 dwmblocks;;
+	5) volume lower | pkill -RTMIN+11 dwmblocks;;
+esac
+
+volume_status=$(amixer get Master | tail -1 | awk '{print $6}' | tr -d '[]')
+
+if [ $volume_status = "on" ]; then
+   echo "  : $(amixer | grep Playback | tail -1 | awk '{print $5}' | tr -d '[]')"
+else
+   echo "  "
+fi

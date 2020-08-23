@@ -1,0 +1,24 @@
+#!/bin/bash
+
+location="Sao_Paulo"
+weatherreport="${XDG_DATA_HOME:-$HOME/.local/share}/weatherreport"
+
+case $BUTTON in
+	1) pkill -RTMIN+16 dwmblocks ;;
+	2) setsid -f "$TERMINAL" -f "Inconsolata Nerd Font:style=Regular:pixelsize=18:antialias=true:autohint=true" -e less -Srf "$weatherreport" | pkill -RTMIN+16 dwmblocks ;;
+	3) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+ping -q -w 1 -c 1 `ip r | grep default | cut -d ' ' -f 3` >/dev/null || exit
+
+if [[ "$location" != "" ]]
+    then
+    location="~${location// /+}"
+fi
+
+curl -s wttr.in/$location > $weatherreport
+
+echo -n $(cat $weatherreport | sed '16q;d' | sed -e 's/[^m]*m//g' | grep -o "[0-9]*%" | sort -n | sed -e '$!d' | sed -e "s/^/ /g")
+
+cat $weatherreport | sed '13q;d' | sed -e 's/[^m]*m//g;s/[^0-9]/ /g;s/ /\n/g;/^s*$/d' | grep [0-9] | sort -n | sed -e 1b -e '$!d' | tr '\n' ' ' | awk '{print " ",$1 "°","",$2 "° "}'
+

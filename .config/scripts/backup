@@ -1,0 +1,11 @@
+#!/bin/bash
+
+rsync --rsync-path \
+  'sudo -u www-data rsync' \
+  -avh --backup-dir=$(date +%F) \
+  --exclude='sasaki/.cache/' \
+  --exclude='sasaki/.dbus/' \
+  --exclude='sasaki/.pki/' \
+  --exclude='sasaki/.local/lib' \
+  --exclude='sasaki/.local/share/Trash' \
+  /home/sasaki homeserver:/mnt/western/Backup/

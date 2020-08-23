@@ -1,0 +1,10 @@
+#!/bin/sh
+
+send_notify() {
+  message=$1
+  sudo -u sasaki notify-send  "🌱 Transmission" "$message"
+}
+
+[ -z "$(pidof transmission-daemon)" ] && transmission-daemon && send_notify "Starting transmission daemon..." && sleep 3
+
+transmission-remote -a "$@" && send_notify "🔽 Torrent added."

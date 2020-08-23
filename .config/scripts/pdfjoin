@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# -dBATCH
+#     Once Ghostscript processes the PDF files, it should exit.
+#     If you don't include this option, Ghostscript will just keep running
+#
+# -dNOPAUSE
+#     Forces Ghostscript to process each page without pausing for user interaction
+#
+# -q
+#     Stops Ghostscript from displaying messages while it works
+#
+# -sDEVICE=pdfwrite
+#     Tells Ghostscript to use its built-in PDF writer to process the files
+#
+# -sOutputFile=finished.pdf
+#     Tells Ghostscript to save the combined PDF file with the name that you specified
+
+for i in $*; do
+	files="$files $i"
+done;
+
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=/home/sasaki/finished.pdf $files

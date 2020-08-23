@@ -1,0 +1,24 @@
+#!/bin/bash
+
+intern="LVDS-1"
+extern="VGA-1"
+
+opt1="VGA-above"
+opt2="LVDS-only"
+opt3="VGA-only"
+opt4="VGA-right"
+
+choose=$(echo -e "$opt1\n$opt2\n$opt3\n$opt4" | dmenu)
+[ -z $choose ] && exit
+
+if [ $choose == $opt1 ]; then
+	xrandr --output VGA-1 --auto --above LVDS-1
+elif [ $choose == $opt2 ]; then
+	xrandr --output VGA-1 --off --output LVDS-1 --auto
+elif [ $choose == $opt3 ]; then
+	xrandr --output VGA-1 --auto --output LVDS-1 --off
+elif [ $choose == $opt4 ]; then
+	xrandr --output VGA-1 --auto --right-of LVDS-1 
+fi
+
+~/.fehbg

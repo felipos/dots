@@ -1,0 +1,28 @@
+#!/bin/bash
+
+DOCKER_OUTPUT="/tmp/vps-docker"
+LOAD_AVERAGE_OUTPUT="/tmp/vps-lavg"
+FREE_DISK_OUTPUT="/tmp/vps-disk"
+
+request_data () {
+  ssh vps 'docker ps --format "table {{.Image}}\t{{.Names}}\t{{.Status}}\t{{.Size}}"' > $DOCKER_OUTPUT
+  ssh vps uptime | awk '{print $10, $11, $12}' > $LOAD_AVERAGE_OUTPUT
+  ssh vps df -h | grep /dev/xvda3 | awk '{print $4}' > $FREE_DISK_OUTPUT
+  cut -d ',' -f 1 $LOAD_AVERAGE_OUTPUT
+}
+
+notify_data () {
+  REFERENCE_AMOUNT=13
+
+  container_amount=$(tail -n +2 $DOCKER_OUTPUT | wc -l)
+  load_average=$(cat $LOAD_AVERAGE_OUTPUT)
+  free_disk=$(cat $FREE_DISK_OUTPUT)
+
+  [ "$container_amount" -eq $REFERENCE_AMOUNT ] && container_status='✔' || container_status='⚠'
+
+  notify-send "vps stats:" "Container status: $container_status \n Average: $load_average \n Space left: $free_disk"
+}
+
+[ "$1" == "--request" ] && request_data
+[ "$1" == "--verbose" ] && request_data && cat $DOCKER_OUTPUT
+[ "$1" == "--notify" ] && notify_data

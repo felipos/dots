@@ -1,0 +1,8 @@
+#!/bin/sh
+
+case $BUTTON in
+	1) notify-send "💽 Disk space" "$(df -h --output=target,used,size)" ;;
+	3) "$TERMINAL" -e "$EDITOR" "$0" ;;
+esac
+
+echo " : $(df -h | grep /mapper | awk '{print $5}' | head -1) "
