@@ -7,6 +7,7 @@ if [ $(xrandr | grep VGA-1 | cut -d ' ' -f 2) = "connected" ]; then
   xset b off 				# disable beep sound in xorg
   chromium &
   sleep 1
+  notify-send -t 10000 "Appointments" "$(calcurse -r7 --output-datefmt '%a, %d' --format-apt ' - %m (%S to %E)\n' --format-recur-apt ' - %m (%S to %E)\n')"
 fi
 
 setxkbmap -model thinkpad60 -layout br
@@ -18,6 +19,7 @@ mpd &
 ibus-daemon -drx &
 
 compton --config $HOME/.config/compton/compton.conf -b
+headphone-bluetooth connect
 
 exec dwmblocks &
 exec dwm
