@@ -30,6 +30,7 @@ set inccommand=split
 let mapleader=","
 set termguicolors
 set nohlsearch
+scriptencoding utf-8
 
 """""""""""" Tab settings """""""""""""""""""""""""""
 set tabstop=2        " The width of a TAB is set to 2.

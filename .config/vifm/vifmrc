@@ -152,6 +152,9 @@ command! Se subdl -l eng %c
 command! Sps echo %f | xargs -n 1 subdl -l pob
 command! Ses echo %f | xargs -n 1 subdl -l eng
 command! Rt convert -rotate 90 %c %c
+command! Rtt convert -rotate 270 %c %c
+"command! Rtts echo %f | xargs -t -n 2 -I{} convert -rotate 270 {} {}
+command! Rtts for f in %f; do convert -rotate 270 "$f" "$f"; done
 command! Fl convert -flop %c %c
 command! extract extract %c
 
@@ -216,8 +219,8 @@ filextype *.djvu
         \ apvlv %f,
 
 " Audio
-filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus mpv %c %i &
-fileviewer *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus
+filetype *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,*.VOB mpv %c %i &
+fileviewer *.wav,*.mp3,*.flac,*.m4a,*.wma,*.ape,*.ac3,*.og[agx],*.spx,*.opus,*.VOB
         \ vifmimg audio %px %py %pw %ph %c
         \ %pc
         \ vifmimg clear

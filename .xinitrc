@@ -22,5 +22,8 @@ ibus-daemon -drx &
 compton --config $HOME/.config/compton/compton.conf -b
 headphone-bluetooth connect
 
+# Prevent Android Studio from showing blank screens
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 exec dwmblocks &
 exec dwm

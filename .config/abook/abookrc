@@ -2,11 +2,12 @@ set autosave=true
 
 field manager="Manager"
 field title="Title"
+field birthdate="Birthdate"
 
 view CONTACT = name, email, title, manager
 view PHONE = phone, workphone, mobile
 view ADDRESS = address, address2, city, state, zip, country
-view OTHER = nick, url
+view OTHER = nick, url,birthdate
 
 set preserve_fields=all
 
