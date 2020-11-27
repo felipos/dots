@@ -20,37 +20,6 @@ function font_preview() {
     > "$FIFO_UEBERZUG"
 }
 
-function pdf_preview() {
-  # if no preview found, generate one
-  if [ ! -f "/tmp${PWD}/$6.png" ]; then
-    pdftoppm -png -singlefile "$6" "/tmp${PWD}/$6"
-  fi
-  declare -p -A cmd=([action]=add [identifier]="$ID_PREVIEW"
-                     [x]="$2" [y]="$3" [width]="$4" [height]="$5" \
-                     [path]="/tmp${PWD}/$6.png") \
-    > "$FIFO_UEBERZUG"
-}
-
-function audio_preview() {
-  # if no preview found, generate one
-  mp3info "${PWD}/$6"
-  #declare -p -A cmd=([action]=add [identifier]="$ID_PREVIEW"
-                     #[x]="$2" [y]="$3" [width]="$4" [height]="$5" \
-                     #[path]="/tmp${PWD}/$6.png") \
-    #> "$FIFO_UEBERZUG"
-}
-
-function video_preview() {
-  # if no preview found, generate one
-  if [ ! -f "/tmp${PWD}/$6.png" ]; then
-    ffmpegthumbnailer -i "${PWD}/$6" -o "/tmp${PWD}/$6.png" -s 0 -q 10
-  fi
-  declare -p -A cmd=([action]=add [identifier]="$ID_PREVIEW"
-                     [x]="$2" [y]="$3" [width]="$4" [height]="$5" \
-                     [path]="/tmp${PWD}/$6.png") \
-    > "$FIFO_UEBERZUG"
-}
-
 function gif_preview() {
   # if no preview found, generate one
   if [ ! -f "/tmp${PWD}/$6.gif" ]; then

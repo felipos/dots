@@ -4,3 +4,6 @@
 =dev-util/android-sdk-update-manager-24.4.1 ~amd64
 >=net-im/telegram-desktop-bin-2.3.0 ~amd64
 >=dev-util/android-studio-4.1.0.19.201.6858069 ~amd64
+app-misc/lf ~amd64
+net-misc/youtube-dl ~amd64
+app-misc/dragon ~amd64

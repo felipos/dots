@@ -12,7 +12,7 @@ mount_fs() {
 
   [ ! -d "$MOUNTING_DIR" ] && notify-send "${SCRIPT_TITLE}" "Mounting directory was not found" && exit
 
-  sshfs $SSH_HOST:$SSH_HOSTPATH $MOUNTING_DIR \
+  sshfs -o follow_symlinks $SSH_HOST:$SSH_HOSTPATH $MOUNTING_DIR \
       && notify-send "${SCRIPT_TITLE}" "Device filesystem mounted in $MOUNTING_DIR"
 }
 
