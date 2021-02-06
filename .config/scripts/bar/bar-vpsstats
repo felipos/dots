@@ -12,7 +12,7 @@ request_data () {
 }
 
 notify_data () {
-  REFERENCE_AMOUNT=13
+  REFERENCE_AMOUNT=15
 
   container_amount=$(tail -n +2 $DOCKER_OUTPUT | wc -l)
   load_average=$(cat $LOAD_AVERAGE_OUTPUT)

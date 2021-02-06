@@ -7,6 +7,7 @@ autoload -Uz vcs_info
 precmd () { vcs_info }
 setopt prompt_subst
 PS1="$PS1\$vcs_info_msg_0_> "
+[ -n "$NNNLVL" ] && PS1="N$NNNLVL $PS1"
 
 setopt autocd		        # Automatically cd into typed directory.
 stty stop undef         # Disable ctrl-s to freeze terminal.
@@ -90,11 +91,6 @@ bindkey '^ ' autosuggest-accept
 source ~/.config/zsh/zsh.env
 source ~/.config/zsh/zsh.alias
 
-# Start tmux by default
-#if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-#  exec tmux
-#fi
-
 # nvm
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
@@ -105,3 +101,4 @@ source ~/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.config/zsh/plugins/zsh-histdb/sqlite-history.zsh
 source ~/.config/zsh/plugins/zsh-histdb/histdb-interactive.zsh
 source ~/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/autojump/autojump.zsh

@@ -6,6 +6,14 @@ rsync --rsync-path \
   --exclude='sasaki/.cache/' \
   --exclude='sasaki/.dbus/' \
   --exclude='sasaki/.pki/' \
+  --exclude='sasaki/.android/' \
+  --exclude='sasaki/.gradle/' \
+  --exclude='sasaki/.gnome/' \
+  --exclude='sasaki/.java/' \
+  --exclude='sasaki/.yarn/' \
+  --exclude='sasaki/.react-native-cli/' \
   --exclude='sasaki/.local/lib' \
+  --exclude='sasaki/Android/' \
+  --exclude='sasaki/Downloads' \
   --exclude='sasaki/.local/share/Trash' \
   /home/sasaki homeserver:/mnt/western/Backup/

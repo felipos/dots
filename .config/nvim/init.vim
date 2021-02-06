@@ -333,3 +333,7 @@ let g:coc_snippet_next = '<tab>'
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " Splits open at the bottom and right, which is non-retarded, unlike vim defaults.
 set splitbelow splitright
+
+let g:loaded_python_provider = 0
+let g:python3_host_prog = '/usr/bin/python3.8'
+"let g:loaded_python3_provider = 0
