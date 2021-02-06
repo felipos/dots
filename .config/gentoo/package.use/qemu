@@ -9,3 +9,5 @@ app-emulation/virt-manager gtk
 >=net-dns/dnsmasq-2.81 script
 
 >=net-misc/spice-gtk-0.37-r2 usbredir
+
+>=dev-libs/libxml2-2.9.10-r4 python_targets_python3_7
