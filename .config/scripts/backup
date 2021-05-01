@@ -16,4 +16,5 @@ rsync --rsync-path \
   --exclude='sasaki/Android/' \
   --exclude='sasaki/Downloads' \
   --exclude='sasaki/.local/share/Trash' \
+  --exclude='sasaki/.config/chromium' \
   /home/sasaki homeserver:/mnt/western/Backup/

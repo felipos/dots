@@ -8,7 +8,8 @@ opt2="LVDS-only"
 opt3="VGA-only"
 opt4="VGA-right"
 
-choose=$(echo -e "$opt1\n$opt2\n$opt3\n$opt4" | dmenu)
+#choose=$(echo -e "$opt1\n$opt2\n$opt3\n$opt4" | dmenu)
+choose=$(echo -e "$opt2\n$opt3" | dmenu)
 [ -z $choose ] && exit
 
 if [ $choose == $opt1 ]; then
@@ -18,7 +19,9 @@ elif [ $choose == $opt2 ]; then
 elif [ $choose == $opt3 ]; then
 	xrandr --output VGA-1 --auto --output LVDS-1 --off
 elif [ $choose == $opt4 ]; then
-	xrandr --output VGA-1 --auto --right-of LVDS-1 
+	xrandr --output VGA-1 --auto --right-of LVDS-1
 fi
 
+setxkbmap -model thinkpad60 -layout br
+setxkbmap -option caps:swapescape
 ~/.fehbg

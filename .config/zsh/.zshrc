@@ -12,6 +12,9 @@ PS1="$PS1\$vcs_info_msg_0_> "
 setopt autocd		        # Automatically cd into typed directory.
 stty stop undef         # Disable ctrl-s to freeze terminal.
 
+# Not try to parse question mark
+unsetopt nomatch
+
 # History configs
 HISTSIZE=10000
 SAVEHIST=10000

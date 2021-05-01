@@ -4,8 +4,9 @@
 #set statusbar-fg "#ebdbb2"
 #set inputbar-bg "#282828"
 #set inputbar-fg "#ebdbb2"
-#set notification-error-bg "#9d0006" 
+#set notification-error-bg "#9d0006"
 map <A-s> toggle_statusbar toggle_inputbar
+set selection-clipboard clipboard
 
 
 # Base16 Gruvbox dark, medium

@@ -103,7 +103,13 @@ set nocompatible
 filetype plugin on
 syntax on
 
-let g:vimwiki_list = [ {'path': '~/Documents/notes', 'syntax': 'markdown', 'ext': '.md'} ]
+let wiki = {}
+let wiki.path = '~/Documents/notes'
+let wiki.syntax = 'markdown'
+let wiki.ext = '.md'
+"let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'js': 'javascript', 'ts': 'typescript', 'sh': 'shell'}
+let wiki.automatic_nested_syntaxes = 1
+let g:vimwiki_list = [wiki]
 
 """"""""""" Git Plugins """""""""""
 set updatetime=100 " gitgutter time
