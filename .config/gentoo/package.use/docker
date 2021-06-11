@@ -19,3 +19,7 @@
 >=dev-python/zope-interface-5.1.2 python_targets_python3_7
 
 >=dev-python/namespace-zope-1-r1 python_targets_python3_7
+
+>=dev-python/toml-0.10.2 python_targets_python3_7
+
+>=dev-python/certifi-10001-r1 python_targets_python3_8

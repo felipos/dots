@@ -269,7 +269,7 @@
 
 # fullscreen values
 # show: show the notifications, regardless if there is a fullscreen window opened
-# delay: displays the new notification, if there is there is no fullscreen window active
+# delay: displays the new notification, if there is no fullscreen window active
 #        If the notification is already drawn, it won't get undrawn.
 # pushback: same as delay, but when switching into fullscreen, the notification will get
 #           withdrawn from screen again and will get delayed like a new notification

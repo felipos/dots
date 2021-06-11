@@ -4,7 +4,11 @@
 >=net-im/telegram-desktop-bin-2.3.0 ~amd64
 >=dev-util/android-studio-4.1.0.19.201.6858069 ~amd64
 =media-sound/ncmpcpp-9999 **
+=net-im/cawbird-9999 **
 net-misc/youtube-dl ~amd64
 app-misc/dragon ~amd64
 x11-misc/xdo ~amd64
 net-im/signal-desktop-bin ~amd64
+net-im/discord-bin ~amd64
+www-apps/hugo ~amd64
+app-misc/nnn ~amd64

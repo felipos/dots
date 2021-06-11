@@ -24,4 +24,6 @@ fi
 
 setxkbmap -model thinkpad60 -layout br
 setxkbmap -option caps:swapescape
+xset s off 			  # prevent the screen to switch off after some time
+xset -dpms 				# prevent the screen to switch off after some time
 ~/.fehbg

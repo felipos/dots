@@ -1,0 +1,2 @@
+# required by www-client/librewolf-bin-85.0.1::librewolf
+>=x11-libs/gtk+-3.24.24-r1 wayland
