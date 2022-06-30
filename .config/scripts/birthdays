@@ -1,0 +1,24 @@
+#!/bin/bash
+
+ADDRESSBOOK_DIR="${HOME}/.local/share/abook/addressbook"
+
+grep name $ADDRESSBOOK_DIR | cut -d '=' -f 2 > /tmp/names
+grep birthdate $ADDRESSBOOK_DIR | cut -d '=' -f 2 > /tmp/birthdates
+
+readarray -t names < /tmp/names
+readarray -t birthdates < /tmp/birthdates
+
+index=0
+current_date=$(date +%F)
+
+for name in "${names[@]}"
+do
+  has_birthdate=$(grep "$name" -A 2 $ADDRESSBOOK_DIR | grep birthdate)
+  if [ -n "$has_birthdate" ]; then
+    birthdate="${birthdates[$index]:5}"
+    current_date=$(date +%m-%d)
+
+    [ "$birthdate" = "$current_date" ] && notify-send -t 10000 "Birthday reminder" "Today is $name birthdays 🎉"
+    let "index++"
+  fi
+done

@@ -21,5 +21,4 @@ fi
 
 [ "$STATUS" = "Charging" ] && color="#FFF"
 
-#echo " `sed -e "s/,//g;s/Discharging/🔋/;s/Charging/🔌/;s/Unknown/⚡/;s/Full/🤔/;s/ 0*/ /g;s/ :/ /g" <<<"$STATUS"` `sed -e 's/$/%/' <<<"$NUM"` "
-echo " `sed -e "s/,//g;s/Discharging//;s/Charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g" <<<"$STATUS"` `sed -e 's/$/%/' <<<"$NUM"` "
+echo " `sed -e "s/,//g;s/Discharging//;s/Charging//;s/Not charging//;s/Unknown//;s/Full//;s/ 0*/ /g;s/ :/ /g" <<<"$STATUS"` `sed -e 's/$/%/' <<<"$NUM"` "

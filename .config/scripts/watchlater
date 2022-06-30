@@ -1,0 +1,22 @@
+#!/bin/bash
+
+watchlater="/home/$USER/.local/share/newsboat/watchlater"
+
+while read url; do
+	title=$(youtube-dl --get-title $url)
+	duration=$(youtube-dl --get-duration $url)
+	id=$(youtube-dl --get-id $url)
+	pkill -RTMIN+8 i3blocks
+	echo $title > $watchlater/downloading
+
+	youtube-dl \
+			--write-auto-sub \
+			--write-info-json \
+			-o $watchlater/'%(title)s - %(uploader)s -'" ${duration}" $url \
+			--newline > $watchlater/progress\
+			&& sed -i '/'$id'/d' $watchlater/videos
+
+	rm $watchlater/progress $watchlater/downloading
+done < $(echo $watchlater/videos)
+
+pkill -RTMIN+8 i3blocks

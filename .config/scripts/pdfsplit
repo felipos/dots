@@ -1,0 +1,17 @@
+#!/bin/bash
+# This function uses 3 arguments:
+#     $1 is the first page of the range to extract
+#     $2 is the last page of the range to extract
+#     $3 is the input file
+#     output file will be named "inputfile_pXX-pYY.pdf"
+
+# Example: ./pdfsplit.sh 4 20 myfile.pdf
+# 4 refers to the page it will start the new pdf.
+# 20 refers to the page it will end the pdf with.
+# myfile.pdf is the pdf file you want to extract parts.
+
+gs -sDEVICE=pdfwrite -dNOPAUSE -dBATCH -dSAFER \
+   -dFirstPage="${1}" \
+   -dLastPage="${2}" \
+   -sOutputFile="${3%.pdf}_p${1}-p${2}.pdf" \
+   "${3}"

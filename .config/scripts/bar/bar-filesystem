@@ -5,4 +5,4 @@ case $BUTTON in
 	3) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-echo " : $(df -h | grep dm-1 | awk '{print $5}' | head -1) "
+echo " : $(df -h | grep ainsthomeloop  | awk '{print $5}' | head -1) "

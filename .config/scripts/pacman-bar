@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo $(gpg -dq ~/Documents/Other/Passwords/systempass.gpg) | sudo -S pacman -Syup &> /dev/null && pkill -RTMIN+9 i3blocks
+updates=$(pacman -Qu | wc -l)
+
+if [ "$updates" -gt 9 ]; then
+	echo "" 
+fi

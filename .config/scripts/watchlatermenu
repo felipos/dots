@@ -1,0 +1,29 @@
+#!/bin/bash
+
+watchlater="/home/$USER/.local/share/newsboat/watchlater"
+fzfmenu="fzf --border --margin 10% --color=light --layout=reverse"
+
+choose=$(ls $watchlater | grep -v .json | grep -v .vtt | grep -v videos | $fzfmenu)
+echo $choose
+
+[ -z $choose ] && exit
+
+option=$(echo -e "Play\nRemove\nOpen in Browser" | $fzfmenu)
+choose="$watchlater/$choose"
+[ -z $choose ] && exit
+
+if [ "$option" = "Play" ]
+then
+	mpv "$choose"
+elif [ "$option" = "Remove" ]
+then
+	choose_file="${choose%.*}"
+	rm "$choose_file.info.json" "$choose"
+elif [ "$option" = "Open in Browser" ]
+then
+	choose="${choose%.*}"
+	url=$(cat "${choose}".info.json | jq .webpage_url | tr -d '"') 
+	firefox $url
+fi
+
+watchlatermenu

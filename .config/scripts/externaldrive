@@ -1,0 +1,9 @@
+#!/bin/bash
+
+mountpoint=$1
+myuser=$2
+
+echo $(gpg -dq /home/$myuser/Documents/Other/Passwords/western.gpg) | \
+		cryptsetup --type tcrypt --veracrypt open /dev/$mountpoint western 
+		
+mount /dev/mapper/western /home/$myuser/Drive

@@ -6,4 +6,5 @@ case $BUTTON in
         3) "$TERMINAL" -e "$EDITOR" "$0" ;;
 esac
 
-echo " : $(free -h | awk '/^Mem:/ {print $3}') "
+#echo " : $(free -h | awk '/^Mem:/ {print $3}') "
+echo " Memory: $(free -h | awk '/^Mem:/ {print $3}') "

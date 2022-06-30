@@ -1,0 +1,10 @@
+#!/bin/bash
+
+server_dir="$HOME/Documents/projects/vps/from-the-wire/"
+content_dir="$server_dir/blog-data/content/"
+interpreter="zsh"
+
+st $interpreter -c "cd $server_dir; docker-compose up; exec $interpreter" &
+st $interpreter -c "cd $content_dir; exec $interpreter" &
+st $interpreter -c "sleep 30; docker exec -it blog pelican -r; exec $interpreter" &
+st $interpreter -c "sleep 30; docker exec -it blog-en pelican -r; exec $interpreter"

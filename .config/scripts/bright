@@ -1,0 +1,15 @@
+#!/bin/sh
+
+level=$(pkexec mate-power-backlight-helper --get-brightness)
+increase_by=12
+
+raise_bright() {
+  pkexec mate-power-backlight-helper --set-brightness $(expr $level + $increase_by)
+}
+
+lower_bright() {
+  pkexec mate-power-backlight-helper --set-brightness $(expr $level - $increase_by)
+}
+
+[ "$1" == "raise" ] && raise_bright && exit
+[ "$1" == "lower" ] && lower_bright && exit

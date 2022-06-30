@@ -1,0 +1,15 @@
+#!/bin/sh
+
+headphone_id="00:1B:66:E8:EC:25"
+speaker_id="FC:E8:06:E5:B0:9B "
+
+[ "$1" == "connect" ] && \
+  bluetoothctl connect $id && \
+  notify-send "🎧 Headphone" "connected!" && \
+  exit
+
+echo "disconnecting"
+[ "$1" == "disconnect" ] && \
+  bluetoothctl disconnect $id && \
+  notify-send "🎧 Headphone" "disconnected!" \
+  && exit

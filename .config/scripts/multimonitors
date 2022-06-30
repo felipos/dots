@@ -8,6 +8,8 @@ opt2="LVDS-only"
 opt3="VGA-only"
 opt4="VGA-right"
 
+#xrandr --output DisplayPort-1 --auto --output eDP --off
+
 #choose=$(echo -e "$opt1\n$opt2\n$opt3\n$opt4" | dmenu)
 choose=$(echo -e "$opt2\n$opt3" | dmenu)
 [ -z $choose ] && exit

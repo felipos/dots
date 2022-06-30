@@ -1,0 +1,52 @@
+#!/bin/sh
+
+LOG_FILE="$HOME/.cache/system-update.log"
+
+tput setaf 4; \
+  echo "It is recommended to do a backup before a system update. Do you wish to backup? (Y/n)" \
+  && tput sgr0 && read choose && tput sgr0
+
+if [ "$choose" != "n" ]
+then
+  bash ~/.config/scripts/backup
+fi
+
+packages_to_update=$(pacman -Qu)
+sudo pacman -Syu
+
+uneeded_dependencies=$(pacman -Qdt | wc -l)
+
+if [ $uneeded_dependencies -gt 0 ]
+then
+  tput setaf 4; echo -e "There are orphans packages \n" && tput sgr0
+  pacman -Qtdq | sudo pacman -Rns -
+fi
+
+tput setaf 4; echo -e "\nChecking pacman cache...\n" && tput sgr0
+sudo pacman -Sc
+
+tput setaf 4; echo -e "\nChecking AUR packages...\n" && tput sgr0
+yay -Syu --aur
+yay -Yc
+
+echo -e "\n### $(date +%F)\n" >> $LOG_FILE
+echo "$packages_to_update" >> $LOG_FILE
+
+if [ ! -z "$packages_from_aur_to_update" ]
+then
+  echo -e "\n- Updates from AUR:\n" >> $LOG_FILE
+  echo "$packages_from_aur_to_update" >> $LOG_FILE
+fi
+
+tput setaf 4; echo "\nUpdating Osterchan VPS \n" && tput sgr0
+ssh osterchan apt update
+ssh osterchan apt upgrade -y
+
+tput setaf 4; echo "\nUpdating Avell \n" && tput sgr0
+ssh avell sudo apt update
+ssh avell sudo apt upgrade -y
+ssh avell sudo apt autoremove
+
+# In case of problems, check:
+  # https://wiki.archlinux.org/title/System_maintenance
+  # https://wiki.archlinux.org/title/pacman

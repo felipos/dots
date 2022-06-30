@@ -1,8 +1,6 @@
 #!/bin/bash
 
-rsync --rsync-path \
-  'sudo -u www-data rsync' \
-  -avh --backup-dir=$(date +%F) \
+rsync -avh --backup-dir=$(date +%F) \
   --exclude='sasaki/.cache/' \
   --exclude='sasaki/.dbus/' \
   --exclude='sasaki/.pki/' \
@@ -14,7 +12,6 @@ rsync --rsync-path \
   --exclude='sasaki/.react-native-cli/' \
   --exclude='sasaki/.local/lib' \
   --exclude='sasaki/Android/' \
-  --exclude='sasaki/Downloads' \
   --exclude='sasaki/.local/share/Trash' \
   --exclude='sasaki/.config/chromium' \
-  /home/sasaki homeserver:/mnt/western/Backup/
+  /home/sasaki homeserver:/mnt/remotes/western/Backup/

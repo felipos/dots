@@ -1,0 +1,21 @@
+#!/bin/bash
+
+CreateMan()
+{
+	count=$(ls -a | grep .myman | wc -l) 
+
+	if [ $count == 0 ]; then
+		mkdir ~/.myman 
+	fi
+
+	$EDITOR ~/.myman/$1 
+}
+
+######################### Simple menu of choices for the system ########################
+
+case $1 in # $1 its a default first entry variable. This variable will contain the user input
+	"help") echo "Help";; # Help()
+	"ls") ls ~/.myman | cat -n;;
+	"rm") rm ~/.myman/$2 ;; # removing a manual. Remember, $2 represents the second perameter passed from user
+	*) CreateMan $1 ;; # thats the way that passing parameters works in shell script
+esac

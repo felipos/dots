@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Usage: pdfdiff changed.pdf original.pdf
+
+compare -verbose -debug coder $1 $2 -compose src /tmp/pdf-diff.tmp
+pdftk /tmp/pdf-diff.tmp background $1 output output-diff.pdf

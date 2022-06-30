@@ -1,0 +1,13 @@
+#!/bin/sh
+
+offlineimap &> /dev/null
+count=$(ls ~/.mail/INBOX/new | wc -l)
+
+if [ "$count" -gt 0 ]; then
+	echo "📩"	
+	#echo " "	
+	#echo "  $count"	
+	#echo "📬"	
+else
+	echo ""
+fi

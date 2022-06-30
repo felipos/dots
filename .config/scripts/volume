@@ -4,11 +4,11 @@ sink=$(pactl list sinks short | grep bluez | awk '{print $1}') || 0
 [ -z "$sink" ] && sink=0
 
 raise_volume() {
-  pactl set-sink-volume $sink +5%
+  pactl set-sink-volume $sink +3%
 }
 
 lower_volume() {
-  pactl set-sink-volume $sink -5%
+  pactl set-sink-volume $sink -3%
 }
 
 toggle_mute() {

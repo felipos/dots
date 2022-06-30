@@ -1,0 +1,30 @@
+#!/bin/bash
+
+PLAYLIST_DIRECTORY="$HOME/.config/mpd/playlists"
+SOURCE_DIRECTORY="$HOME/Musics"
+PHONE_DESTINATION="$HOME/Documents/synced/phone/musics"
+
+DENYLIST=(
+  '80s'
+  'ABC'
+  'Classic'
+  'Frito'
+  'Iron Maiden'
+  'Neverland'
+  'Galneryus'
+)
+
+for playlist_path in $PLAYLIST_DIRECTORY/*.m3u; do
+  artist=$(basename "$playlist_path" | cut -f 1 -d '.')
+
+  if [[ ! " ${DENYLIST[*]} " =~ " ${artist} " ]]; then # if the artist is not in denylist
+    mkdir -p $PHONE_DESTINATION/"$artist"
+
+    while read song; do
+      echo "syncing $song"
+      rsync -hs --ignore-existing $SOURCE_DIRECTORY/"$song" $PHONE_DESTINATION/"$artist"/
+    done < "$playlist_path"
+  fi
+done
+
+echo -e "\nTotal size of the destination directory: $(du -sh $PHONE_DESTINATION)"

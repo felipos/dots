@@ -1,0 +1,4 @@
+#!/bin/sh
+
+count=$(node ~/.local/src/rss-suite/cli/dist/index.js --count)
+echo " : $count "

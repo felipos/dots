@@ -20,4 +20,4 @@ for i in $*; do
 	files="$files $i"
 done;
 
-gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=/home/sasaki/finished.pdf $files
+gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -sOutputFile=/home/sasaki/joined.pdf $files

@@ -1,0 +1,76 @@
+#!/bin/bash
+
+# this export is requiered for i3 handle this script with its bindsym
+export PATH=$HOME/.scripts/usbmanager:$PATH
+
+myuser=$2
+
+print_message() {
+	mount_status=$(< /tmp/usb_manager_error)
+
+	if [ -z $mount_status ]
+	then
+		if [ "$1" = "mount" ]
+		then
+			msg="$2 mounted in $3"
+		else
+			msg="$2 umounted"
+		fi
+
+	else
+		msg="there was an error while doing this operation, please check /tmp/usb_manager_error"
+	fi
+
+	echo $(su $myuser -c "gpg -dq /home/$myuser/Documents/Other/Passwords/systempass.gpg") \
+		| DISPLAY=:0.0 su $myuser -c "/usr/bin/notify-send '$msg'"
+}
+
+mount_encrypted() {
+	echo $(gpg -dq /home/$myuser/Documents/Other/Passwords/$1.gpg) | \
+			cryptsetup --type tcrypt --veracrypt open /dev/$2 $1 2> /tmp/usb_manager_error
+
+	mount /dev/mapper/$1 $3
+	print_message mount "Encrypted device" " $3"
+}
+
+if [ "$1" = "mount" ]
+then
+	choose=$(lsblk -l | grep part | grep -v / | awk {'print $1, $4'} | dmenu -p "device to mount")
+	[ -z $choose ] && exit
+	choose=$(echo $choose | awk {'print $1'}) 
+	edrive=$(echo -e "no\nyes" | dmenu -p "Encrypted external drive?")
+	[ -z $edrive ] && exit
+
+	if [ "$edrive" = "yes" ]
+	then
+		edrive=$(echo -e "western\nseagate" | dmenu -p "Which one?")
+		[ -z $edrive ] && exit
+
+		if [ "$edrive" = "western" ]
+		then
+			mount_encrypted $edrive $choose /home/$myuser/Drive
+		else
+			mount_encrypted $edrive $choose /mnt/$edrive
+		fi
+		exit
+	fi	
+
+	destination=$(ls /mnt | dmenu -p "destination point" )
+	[ -z $destination ] && exit
+
+	mount -o gid=users,fmask=113,dmask=002 /dev/$choose /mnt/$destination 2>/tmp/usb_manager_error
+	print_message mount $choose "/mnt/$destination"
+else
+	choose=$(lsblk -l | grep -E "part|crypt" | grep / | grep -v -E "root|/boot" | awk {'print $1, $4'} | dmenu -p "device to umount")
+	[ -z $choose ] && exit
+	choose=$(echo $choose | awk {'print $1'})
+	mpoint=$(lsblk -l | grep $choose | grep / | awk {'print $7'})
+
+	if [ "$choose" = "seagate" ] || [ "$choose" = "western" ]
+	then
+		cryptsetup --type tcrypt --veracrypt close $choose
+	fi
+
+	umount $mpoint 2>/tmp/usb_manager_error
+	print_message umount $choose
+fi

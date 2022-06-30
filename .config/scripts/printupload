@@ -7,7 +7,7 @@ choose=$(echo -e "Yes\nNo" | dmenu -p "Do you want to upload this file?")
 
 if [ "$choose" = "Yes" ]
 then
-    curl -F"file=@/tmp/$now.png" https://0x0.st | \
+  curl -F"file=@/tmp/$now.png" https://0x0.st | \
 	xclip -selection clipboard \
 	&& notify-send "Screenshot sent!" "URL copied to clipboard"
 fi

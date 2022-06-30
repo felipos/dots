@@ -1,0 +1,11 @@
+#!/bin/sh
+
+export DISPLAY=:0
+export QT_PLUGIN_PATH=/usr/lib/plugins:/usr/lib/qt5/plugins:/usr/lib/qt5/plugins:/lib/kde5/plugins/
+export KDE_FULL_SESSION=true
+export XDG_RUNTIME_DIR=/run/user/1000
+
+kdialog --title "Hey" --passivepopup "Change your position!" 5
+
+#kdialog --icon 'emblem-insync-syncing-shared' --title 'PIM backup' --passivepopup 'backed up' 5
+#kdialog --passivepopup "<h4>HTML <i>sort</i> of works</h4><br /><hr />" 10

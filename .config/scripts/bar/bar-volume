@@ -7,10 +7,10 @@ case $BUTTON in
 	5) volume lower | pkill -RTMIN+11 dwmblocks;;
 esac
 
-volume_status=$(amixer get Master | tail -1 | awk '{print $6}' | tr -d '[]')
+volume_status=$(pamixer --get-mute)
 
-if [ $volume_status = "on" ]; then
-   echo "  : $(amixer | grep Playback | tail -1 | awk '{print $5}' | tr -d '[]')"
+if [ $volume_status = "false" ]; then
+   echo "  : $(pamixer --get-volume)"
 else
    echo "  "
 fi
