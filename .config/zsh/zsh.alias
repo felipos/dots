@@ -1,0 +1,43 @@
+alias v=nvim
+alias vim=nvim
+alias vim=nvim
+alias nc=ncmpcpp
+alias vc="nvim ~/.config/nvim/init.vim"
+alias zc="nvim ~/.config/zsh/.zshrc"
+alias cat=bat
+alias g=git
+alias neo=neofetch
+alias wt="curl wttr.in/Sao_Paulo"
+alias wr="ssh -i ~/.ssh/homeserver_key felipe@homeserver -t tmux a -t weechat"
+alias sc="ssh -i ~/.ssh/homeserver_key felipe@homeserver python /home/felipe/.local/bin/speedtest"
+alias vifm="vifmrun"
+alias grep='grep  --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+alias abook='abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook'
+alias gnupg='gpg2 --homedir "$XDG_DATA_HOME"/gnupg'
+alias play-lofi='mpc add $(yt-dlp -g https://www.youtube.com/watch\?v=5qap5aO4i9A) && mpc play'
+alias play-ghibli-lofi='mpc add $(yt-dlp -g https://www.youtube.com/watch?v=AZals4U6Z_I) && mpc play'
+alias empty-trash='sudo rm -rf ~/.local/share/Trash/*'
+alias ts='transmission-show'
+alias history=histdb
+alias mv='mvg -g'
+alias cp='cpg -gr'
+alias mkdir='mkdir -vp'
+alias mv='mv -i'
+alias rm='rm -i'
+#alias cp='cp -i'
+alias r='lfub'
+alias run='./Taskfile'
+alias rss-cli='node ~/.local/bin/rss-suite/cli/dist/index.js'
+alias tf='nvim scp://homeserver//home/felipe/transfer.md'
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+# Changing "ls" to "exa"
+alias ls='lsd'
+alias l='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+
+alias cf='/usr/bin/git --git-dir=$HOME/Documents/projects/dotfiles/ --work-tree=$HOME'

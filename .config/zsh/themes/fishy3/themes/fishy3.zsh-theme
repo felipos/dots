@@ -1,3 +1,4 @@
+# vim: syntax=sh
 # ZSH Theme emulating the Fish shell's default prompt.
 
 _fishy_collapsed_wd() {
@@ -53,7 +54,7 @@ function virtualenv_prompt_info(){
 }
 
 if [ -z $PUBLIC_IP ]; then
-  export PUBLIC_IP=$(curl -m 0.5 -s icanhazip.com)
+  #export PUBLIC_IP=$(curl -m 0.5 -s icanhazip.com)
 fi
 
 function public_ip() {
@@ -80,9 +81,7 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 local user_color='green'; [ $UID -eq 0 ] && user_color='red'
 
-PROMPT='$(ssh_connection)$(public_ip)$(private_ip)$(virtualenv_prompt_info)%{$fg_bold[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$reset_color%}%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%} %(!.#.$) '
-
-PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
+PROMPT='$(ssh_connection)$(private_ip)$(virtualenv_prompt_info)%{$fg_bold[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$reset_color%}%{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%} %(!.#.$) '
 
 git_prompt_info() {
    if [ -d .git ]; then

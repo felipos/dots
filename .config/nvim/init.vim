@@ -86,9 +86,10 @@ let g:plug_window = 'noautocmd vertical topleft new'
 let NERDTreeShowHidden=1
 
 """"""""""""" NERD Commenter """""""""""
-nnoremap <C-_> :call NERDComment(0,"toggle")<C-m>
-vnoremap <C-_> :call NERDComment(0,"toggle")<C-m>
-inoremap <C-_> <C-o>:call NERDComment(0,"toggle")<C-m>
+"nerdcommenter#Comment()
+nnoremap <C-_> :call nerdcommenter#Comment(0,"toggle")<C-m>
+vnoremap <C-_> :call nerdcommenter#Comment(0,"toggle")<C-m>
+inoremap <C-_> <C-o>:call nerdcommenter#Comment(0,"toggle")<C-m>
 
 """"""""""" Vim Airline """""""""""
 let g:airline#extensions#tabline#enabled = 1
