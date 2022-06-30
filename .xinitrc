@@ -1,38 +1,27 @@
 #!/bin/sh
 
-if [ $(xrandr | grep VGA-1 | cut -d ' ' -f 2) = "connected" ]; then
-  xrandr --output VGA-1 --auto --output LVDS-1 --off
-  xset s off 			  # prevent the screen to switch off after some time
-  xset -dpms 				# prevent the screen to switch off after some time
-  xset b off 				# disable beep sound in xorg
-  firefox &
-  telegram &
-  sleep 1
-  notify-send -t 10000 "Appointments" "$(calcurse -r7 --output-datefmt '%a, %d' --format-apt ' - %m (%S to %E)\n' --format-recur-apt ' - %m (%S to %E)\n')"
-  sleep 10
-fi
+## Start KDE
 
-bash $HOME/.config/scripts/birthdays
+export DESKTOP_SESSION=plasma
+exec startplasma-x11
 
-setxkbmap -model thinkpad60 -layout br
-setxkbmap -option caps:swapescape	# swap caps and esc
+## Start AwesomeWM
 
-redshift &
-$HOME/.fehbg &
-mpd &
-ibus-daemon -drx &
-st -e tmux &
-headphone-bluetooth connect &
-xrdb ~/.Xresources
+# Applications that needs dbus session (like flameshot)
+#export $(dbus-launch)
 
-compton --config $HOME/.config/compton/compton.conf -b
-numlockx on
-sudo cpupower frequency-set -u 1200Mhz
+#echo 0 | sudo tee /sys/module/hid_apple/parameters/fnmode # use functions keys by default on keychron k2
 
-# prevent Android Studio from showing blank screens
-export _JAVA_AWT_WM_NONREPARENTING=1
-# required for applications that needs dbus session
-export $(dbus-launch)
+#xset s off 			  # prevent the screen to switch off after some time
+#xset -dpms 				# prevent the screen to switch off after some time
+#xset b off 				# disable beep sound in xorg
 
-exec dwmblocks &
-exec dwm 2> ~/.config/dwm/dwm.log
+##dunst &
+##redshift &
+###ibus-daemon -drx &
+#picom --config $HOME/.config/picom/picom.conf --xrender-sync-fence -b
+#xrdb ~/.Xresources
+
+#fcitx5 &
+#exec ~/.xrequire &
+#exec /usr/bin/awesome >> ~/.cache/awesome/stdout.log 2>> ~/.cache/awesome/stderr.log
