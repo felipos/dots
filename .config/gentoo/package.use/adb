@@ -1,4 +1,0 @@
-x11-wm/dwm savedconfig xinerama
->=dev-java/swt-3.7.2-r3:3.7 cairo
->=sys-libs/ncurses-compat-5.9 abi_x86_32
->=sys-libs/zlib-1.2.11-r2 abi_x86_32

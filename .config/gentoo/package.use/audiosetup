@@ -1,7 +1,0 @@
-# required by media-sound/bluez-alsa-2.1.0::gentoo
-# required by bluez-alsa (argument)
->=dev-libs/glib-2.62.6 dbus
-
-media-sound/pulseaudio -gtk dbus native-headset
-
-net-wireless/bluez deprecated

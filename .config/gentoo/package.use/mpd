@@ -1,1 +1,0 @@
-media-sound/mpd -nfs -recorder -mms -samba -soundcloud  -ipv6 opus oss unicode sqlite curl

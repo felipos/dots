@@ -1,5 +1,0 @@
-media-video/ffmpegthumbnailer png jpeg
-
-dev-python/pillow jpeg jpeg2k webp
-
->=media-gfx/imagemagick-7.0.10.9 png jpeg

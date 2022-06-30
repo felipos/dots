@@ -1,9 +1,0 @@
-app-text/zathura-pdf-poppler
->=app-text/poppler-0.88.0-r1 cairo
-
-app-text/zathura-meta cb pdf djvu postscript
->=app-text/poppler-0.88.0-r1 cairo
-
-app-text/poppler png jpeg
-
-app-text/zathura magic

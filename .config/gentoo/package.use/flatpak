@@ -1,4 +1,0 @@
-# required by sys-apps/flatpak-1.10.0::gentoo
-# required by sys-apps/flatpak (argument)
->=dev-util/ostree-2020.8 curl
-

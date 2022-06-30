@@ -1,7 +1,0 @@
-# elogind USE changes
-
->=dev-lang/python-2.7.18:2.7 sqlite
-
->=dev-python/certifi-10001-r1 python_targets_python3_7
-
->=dev-python/setuptools_scm-4.1.2-r1 python_targets_python3_7
