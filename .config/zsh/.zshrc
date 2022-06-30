@@ -1,3 +1,5 @@
+cd $HOME
+
 # Enable colors and change prompt:
 autoload -U colors && colors	# Load colors
 PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%~%{$fg[red]%}]%{$reset_color%}$%b"
@@ -21,6 +23,18 @@ SAVEHIST=10000
 HISTFILE=~/.cache/zsh/history
 
 autoload -Uz add-zsh-hook
+
+_zsh_autosuggest_strategy_histdb_top_here() {
+    local query="select commands.argv from
+history left join commands on history.command_id = commands.rowid
+left join places on history.place_id = places.rowid
+where places.dir LIKE '$(sql_escape $PWD)%'
+and commands.argv LIKE '$(sql_escape $1)%'
+group by commands.argv order by count(*) desc limit 1"
+    suggestion=$(_histdb_query "$query")
+}
+
+ZSH_AUTOSUGGEST_STRATEGY=histdb_top_here
 
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
@@ -84,8 +98,9 @@ bindkey -s '^o' 'vifm\n'
 bindkey -s '^a' 'bc -l\n'
 bindkey -s '^f' 'config-finder\n'
 bindkey -s '^w' 'wiki-finder\n'
-bindkey '^r' _histdb-isearch
+#bindkey '^r' _histdb-isearch
 #bindkey '^R' history-incremental-search-backward
+bindkey '^r' _histdb-isearch
 bindkey '^ ' autosuggest-accept
 
 [ -f ~/config/.fzf.zsh ] && source ~/config/.fzf.zsh
@@ -95,13 +110,14 @@ source ~/.config/zsh/zsh.env
 source ~/.config/zsh/zsh.alias
 
 # nvm
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+source /usr/share/nvm/init-nvm.sh
 
 # Load plugins; should be the last
+fpath=(~/.config/zsh/plugins/zsh-completions/src $fpath)
+
 source ~/.config/zsh/themes/fishy3/themes/fishy3.zsh-theme
 source ~/.config/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.config/zsh/plugins/zsh-histdb/sqlite-history.zsh
 source ~/.config/zsh/plugins/zsh-histdb/histdb-interactive.zsh
 source ~/.config/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/autojump/autojump.zsh
+#source /usr/share/autojump/autojump.sh

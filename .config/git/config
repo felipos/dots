@@ -14,6 +14,7 @@
 	 %d %Creset%s %C(green bold)(%an)%Creset' --graph --all --abbrev-commit --date=short
     cmp = "!f() { git add -A && git commit -m \"$@\" && git push -u; }; f"
     pod = pull origin develop
+    pom = pull origin master
     cm = commit -m
     po = push origin
     ps = push
@@ -21,6 +22,9 @@
     cd = checkout develop
     cb = checkout -b
     st = status -sb
+    b = branch
+    sup = submodule update --recursive
+    clear-branches = "!f() { git branch | grep -v master | grep -v release | grep -v develop | xargs git branch -D; }; f"
     sf = show --name-only
     lg = log --pretty=format:'%Cred%h%Creset %C(bold)%cr%Creset %Cgreen<%an>%Creset %s' --max-count=30
     incoming = !(git fetch --quiet && git log --pretty=format:'%C(yellow)%h %C(white)- %C(red)%an %C(white)- %C(cyan)%d%Creset %s %C(white)- %ar%Creset' ..@{u})
@@ -34,7 +38,7 @@
 [push]
 	default = current
 [core]
-	pager = diff-so-fancy | less --tabs=4 -RFX
+  pager = diff-so-fancy | less --tabs=4 -RFX
 [color]
   all = true
   ui = true
@@ -60,6 +64,12 @@
 [difftool "vim"]
   cmd = vim -d -R "$LOCAL" "$REMOTE"
 [credential]
-	helper = osxkeychain
+  helper = cache --timeout=157680000
 [github]
-	user = cfelipe
+	user = felipos
+[init]
+	defaultBranch = main
+[interactive]
+	diffFilter = diff-so-fancy --patch
+[pull]
+	rebase = false
