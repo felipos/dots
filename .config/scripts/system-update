@@ -38,6 +38,13 @@ then
   echo "$packages_from_aur_to_update" >> $LOG_FILE
 fi
 
+git -C ~/.config/zsh/plugins/zsh-autosuggestions pull origin master
+git -C ~/.config/zsh/plugins/zsh-completions pull origin master
+git -C ~/.config/zsh/plugins/zsh-histdb pull origin master
+git -C ~/.config/zsh/plugins/zsh-syntax-highlighting pull origin master
+git -C ~/.config/alacritty/themes/dracula pull origin master
+doom sync && doom upgrade
+
 tput setaf 4; echo "\nUpdating Osterchan VPS \n" && tput sgr0
 ssh osterchan apt update
 ssh osterchan apt upgrade -y

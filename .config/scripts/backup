@@ -1,17 +1,59 @@
 #!/bin/bash
 
-rsync -avh --backup-dir=$(date +%F) \
-  --exclude='sasaki/.cache/' \
-  --exclude='sasaki/.dbus/' \
-  --exclude='sasaki/.pki/' \
-  --exclude='sasaki/.android/' \
-  --exclude='sasaki/.gradle/' \
-  --exclude='sasaki/.gnome/' \
-  --exclude='sasaki/.java/' \
-  --exclude='sasaki/.yarn/' \
-  --exclude='sasaki/.react-native-cli/' \
-  --exclude='sasaki/.local/lib' \
-  --exclude='sasaki/Android/' \
-  --exclude='sasaki/.local/share/Trash' \
-  --exclude='sasaki/.config/chromium' \
-  /home/sasaki homeserver:/mnt/remotes/western/Backup/
+destinations=( "/mnt/remotes/western/Backup/" "/mnt/remotes/seagate/Backup/" )
+
+for destination in "${destinations[@]}"
+do
+  rsync -avh --backup-dir=$(date +%F) \
+    --exclude='sasaki/.android/' \
+    --exclude='sasaki/.cache/' \
+    --exclude='sasaki/.cargo/' \
+    --exclude='sasaki/.config/BraveSoftware' \
+    --exclude='sasaki/.config/cantata' \
+    --exclude='sasaki/.config/cef_user_data' \
+    --exclude='sasaki/.config/clojure' \
+    --exclude='sasaki/.config/configstore' \
+    --exclude='sasaki/.config/crunchyroll-nativefier-48ddfb' \
+    --exclude='sasaki/.config/discord' \
+    --exclude='sasaki/.config/Electron' \
+    --exclude='sasaki/.config/eog' \
+    --exclude='sasaki/.config/epiphany' \
+    --exclude='sasaki/.config/evolution' \
+    --exclude='sasaki/.config/Ferdi' \
+    --exclude='sasaki/.config/freerdp' \
+    --exclude='sasaki/.config/gedit' \
+    --exclude='sasaki/.config/Google' \
+    --exclude='sasaki/.config/gtk-3.0' \
+    --exclude='sasaki/.config/gtk-4.0' \
+    --exclude='sasaki/.config/ibus' \
+    --exclude='sasaki/.config/inkscape' \
+    --exclude='sasaki/.config/onlyoffice' \
+    --exclude='sasaki/.electron-gyp' \
+    --exclude='sasaki/.expo' \
+    --exclude='sasaki/.getlibs' \
+    --exclude='sasaki/.java' \
+    --exclude='sasaki/.local/bin/crunchyroll-nativefier' \
+    --exclude='sasaki/.local/bin/go' \
+    --exclude='sasaki/.local/share' \
+    --exclude='sasaki/.local/state' \
+    --exclude='sasaki/.local/lib' \
+    --exclude='sasaki/.m2/' \
+    --exclude='sasaki/.npm/' \
+    --exclude='sasaki/.nvm/' \
+    --exclude='sasaki/.parallel/' \
+    --exclude='sasaki/.pki/' \
+    --exclude='sasaki/.qwinff/' \
+    --exclude='sasaki/.yarn/' \
+    --exclude='sasaki/.zoom/' \
+    --exclude='sasaki/.dbus/' \
+    --exclude='sasaki/Android/' \
+    --exclude='sasaki/Desktop/' \
+    --exclude='sasaki/Sync/' \
+    --exclude='sasaki/.directory/' \
+    --exclude='sasaki/.emulator_console_auth_token/' \
+    --exclude='sasaki/.yarnrc/' \
+    --exclude='sasaki/.gradle/' \
+    --exclude='sasaki/.gnome/' \
+    --exclude='sasaki/.react-native-cli/' \
+    /home/sasaki homeserver:$destination
+done
