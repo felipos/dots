@@ -5,6 +5,7 @@ if not status_ok then
 end
 
 telescope.load_extension('media_files')
+telescope.load_extension('frecency')
 
 local actions = require "telescope.actions"
 
@@ -86,9 +87,16 @@ telescope.setup {
   },
   extensions = {
     media_files = {
-        -- filetypes whitelist (defaults to {"png", "jpg", "mp4", "webm", "pdf"})
-        filetypes = {"png", "webp", "jpg", "jpeg"},
-        find_cmd = "rg" -- find command (defaults to `fd`)
-      }
+      -- filetypes whitelist (defaults to {"png", "jpg", "mp4", "webm", "pdf"})
+      filetypes = {"png", "webp", "jpg", "jpeg"},
+      find_cmd = "rg" -- find command (defaults to `fd`)
+    },
+    frecency = {
+      show_scores = false,
+      show_unindexed = true,
+      ignore_patterns = {"*.git/*", "*/tmp/*"},
+      disable_devicons = false,
+    }
+
   },
 }

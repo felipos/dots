@@ -77,6 +77,8 @@ return packer.startup(function(use)
 	use("nvim-telescope/telescope.nvim")
 	use("nvim-telescope/telescope-media-files.nvim")
 	use("kyazdani42/nvim-web-devicons")
+  use("kkharji/sqlite.lua") -- for telescope-frecency
+  use("nvim-telescope/telescope-frecency.nvim")
 
 	-- Treesitter
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
