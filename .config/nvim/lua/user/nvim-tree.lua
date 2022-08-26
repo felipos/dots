@@ -40,17 +40,20 @@ nvim_tree.setup {
     },
   },
   update_focused_file = {
-    enable = true,
+    enable = false,
     update_cwd = true,
     ignore_list = {},
   },
   git = {
     enable = true,
-    ignore = true,
+    ignore = false,
     timeout = 500,
   },
+  filters = {
+    dotfiles = false,
+  },
   view = {
-    width = 30,
+    width = 50,
     height = 30,
     hide_root_folder = false,
     side = "left",
