@@ -77,8 +77,8 @@ return packer.startup(function(use)
 	use("nvim-telescope/telescope.nvim")
 	use("nvim-telescope/telescope-media-files.nvim")
 	use("kyazdani42/nvim-web-devicons")
-  use("kkharji/sqlite.lua") -- for telescope-frecency
-  use("nvim-telescope/telescope-frecency.nvim")
+	use("kkharji/sqlite.lua") -- for telescope-frecency
+	use("nvim-telescope/telescope-frecency.nvim")
 
 	-- Treesitter
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
@@ -87,6 +87,12 @@ return packer.startup(function(use)
 	-- Comments
 	use("numToStr/Comment.nvim")
 	use("JoosepAlviste/nvim-ts-context-commentstring")
+
+	-- Image viewer
+	use({ "samodostal/image.nvim" })
+
+	-- Highlight other uses of the word under the cursor
+	use("RRethy/vim-illuminate")
 
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
