@@ -46,7 +46,6 @@ return packer.startup(function(use)
 	use({ "iamcco/markdown-preview.nvim", run = "cd app && yarn install", ft = { "markdown" } }) -- Doesnt works with lazy load. See https://github.com/wbthomason/packer.nvim/issues/620
 	use({ "windwp/nvim-autopairs" })
 	use("kyazdani42/nvim-tree.lua")
-	use("akinsho/bufferline.nvim")
 
 	-- Themes
 	use("folke/tokyonight.nvim")
@@ -63,6 +62,7 @@ return packer.startup(function(use)
 
 	-- colorscheme pack
 	use("LunarVim/Colorschemes")
+	use("whatsthatsmell/codesmell_dark.vim")
 
 	-- snippets
 	use("L3MON4D3/LuaSnip") --snippet engine
@@ -93,6 +93,10 @@ return packer.startup(function(use)
 
 	-- Highlight other uses of the word under the cursor
 	use("RRethy/vim-illuminate")
+
+  -- Buffers
+	use("akinsho/bufferline.nvim")
+  use("beauwilliams/focus.nvim")
 
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
