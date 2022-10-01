@@ -98,6 +98,10 @@ return packer.startup(function(use)
 	use("akinsho/bufferline.nvim")
   use("beauwilliams/focus.nvim")
 
+  -- Git
+  use("tpope/vim-fugitive")
+  use("tpope/vim-rhubarb")
+
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end
