@@ -6,6 +6,7 @@ end
 
 telescope.load_extension('media_files')
 telescope.load_extension('frecency')
+telescope.load_extension('harpoon')
 
 local actions = require "telescope.actions"
 
@@ -97,6 +98,5 @@ telescope.setup {
       ignore_patterns = {"*.git/*", "*/tmp/*"},
       disable_devicons = false,
     }
-
   },
 }

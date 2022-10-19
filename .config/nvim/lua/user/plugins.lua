@@ -47,9 +47,6 @@ return packer.startup(function(use)
 	use({ "windwp/nvim-autopairs" })
 	use("kyazdani42/nvim-tree.lua")
 
-	-- Themes
-	use("folke/tokyonight.nvim")
-
 	-- cmp plugins
 	use("hrsh7th/nvim-cmp") -- The completion plugin
 	use("hrsh7th/cmp-buffer") -- buffer completions
@@ -60,7 +57,8 @@ return packer.startup(function(use)
 	use("hrsh7th/cmp-nvim-lua")
 	use("akinsho/toggleterm.nvim")
 
-	-- colorscheme pack
+	-- Themes
+	use("folke/tokyonight.nvim")
 	use("LunarVim/Colorschemes")
 	use("whatsthatsmell/codesmell_dark.vim")
 
@@ -101,6 +99,9 @@ return packer.startup(function(use)
   -- Git
   use("tpope/vim-fugitive")
   use("tpope/vim-rhubarb")
+
+  -- Motion
+  use("ThePrimeagen/harpoon")
 
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()

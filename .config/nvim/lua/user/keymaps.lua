@@ -60,7 +60,13 @@ keymap("n", "<leader>c", "<cmd>Telescope command_history<cr>", opts)
 keymap("n", "<leader>e", "<cmd>Telescope registers<cr>", opts)
 keymap("n", "<leader>s", "<cmd>Telescope spell_suggest<cr>", opts)
 keymap("n", "<leader>k", "<cmd>Telescope keymaps<cr>", opts)
-keymap("n", "<leader>t", "<cmd>lua require'telescope.builtin'.colorscheme{}<cr>", opts)
+keymap("n", "<leader>t", "<cmd>lua require('telescope.builtin').colorscheme{}<cr>", opts)
+
+
+keymap("n", "<leader>m", "<cmd>lua require('harpoon.mark').add_file()<cr>", opts)
+keymap("n", "<leader>l", "<cmd>Telescope harpoon marks<cr>", opts)
+keymap("n", "<C-m>", "<cmd>lua require('harpoon.ui').nav_next()<cr>", opts)
+keymap("n", "<C-c>", "<cmd>lua require('harpoon.ui').nav_prev()<cr>", opts)
 
 -- Code formating
 keymap("n", "<leader>p", ":Format<cr>", opts)
