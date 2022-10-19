@@ -1,6 +1,7 @@
 #!/bin/bash
 
-destinations=( "/mnt/remotes/western/Backup/" "/mnt/remotes/seagate/Backup/" )
+# destinations=( "/mnt/remotes/western/Backup/" "/mnt/remotes/seagate/Backup/" )
+destinations=( "/mnt/remotes/western/Backup/" )
 
 for destination in "${destinations[@]}"
 do
@@ -9,6 +10,7 @@ do
     --exclude='sasaki/.cache/' \
     --exclude='sasaki/.cargo/' \
     --exclude='sasaki/.config/BraveSoftware' \
+    --exclude='sasaki/.config/Slack' \
     --exclude='sasaki/.config/cantata' \
     --exclude='sasaki/.config/cef_user_data' \
     --exclude='sasaki/.config/clojure' \

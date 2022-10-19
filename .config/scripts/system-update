@@ -43,11 +43,8 @@ git -C ~/.config/zsh/plugins/zsh-completions pull origin master
 git -C ~/.config/zsh/plugins/zsh-histdb pull origin master
 git -C ~/.config/zsh/plugins/zsh-syntax-highlighting pull origin master
 git -C ~/.config/alacritty/themes/dracula pull origin master
-doom sync && doom upgrade
 
-tput setaf 4; echo "\nUpdating Osterchan VPS \n" && tput sgr0
-ssh osterchan apt update
-ssh osterchan apt upgrade -y
+doom sync && doom upgrade
 
 tput setaf 4; echo "\nUpdating Avell \n" && tput sgr0
 ssh avell sudo apt update

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-location="Sao_Paulo"
+location="Curitiba"
 weatherreport="${XDG_DATA_HOME:-$HOME/.local/share}/weatherreport"
 
 case $BUTTON in
