@@ -46,10 +46,11 @@ return packer.startup(function(use)
 	use({ "iamcco/markdown-preview.nvim", run = "cd app && yarn install", ft = { "markdown" } }) -- Doesnt works with lazy load. See https://github.com/wbthomason/packer.nvim/issues/620
 	use({ "windwp/nvim-autopairs" })
 	use("kyazdani42/nvim-tree.lua")
-	use("akinsho/bufferline.nvim")
 
 	-- Themes
+	use("LunarVim/Colorschemes")
 	use("folke/tokyonight.nvim")
+  use({ 'kartikp10/noctis.nvim', requires = { 'rktjmp/lush.nvim' } })
 
 	-- cmp plugins
 	use("hrsh7th/nvim-cmp") -- The completion plugin
@@ -61,8 +62,9 @@ return packer.startup(function(use)
 	use("hrsh7th/cmp-nvim-lua")
 	use("akinsho/toggleterm.nvim")
 
-	-- colorscheme pack
-	use("LunarVim/Colorschemes")
+  -- Buffers
+	use("akinsho/bufferline.nvim")
+  use("beauwilliams/focus.nvim")
 
 	-- snippets
 	use("L3MON4D3/LuaSnip") --snippet engine
@@ -77,8 +79,6 @@ return packer.startup(function(use)
 	use("nvim-telescope/telescope.nvim")
 	use("nvim-telescope/telescope-media-files.nvim")
 	use("kyazdani42/nvim-web-devicons")
-  use("kkharji/sqlite.lua") -- for telescope-frecency
-  use("nvim-telescope/telescope-frecency.nvim")
 
 	-- Treesitter
 	use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
@@ -93,6 +93,14 @@ return packer.startup(function(use)
 
   -- Highlight other uses of the word under the cursor
 	use("RRethy/vim-illuminate")
+
+  -- Git
+  use("tpope/vim-fugitive")
+  use("tpope/vim-rhubarb")
+
+	-- Find and Replace
+  use("windwp/nvim-spectre")
+
 
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
