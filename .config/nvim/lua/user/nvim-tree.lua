@@ -98,6 +98,3 @@ nvim_tree.setup({
 		},
 	},
 })
-
-vim.cmd("highlight NvimTreeNormal guibg=#CCC") -- try to change nvim-tree background but it doesnt work
-vim.cmd("highlight NvimTreeNormal guifg=#CCC") -- try to change nvim-tree background but it doesnt work

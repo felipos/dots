@@ -37,6 +37,6 @@ illuminate.configure({
 	under_cursor = true,
 })
 
-vim.cmd("hi def IlluminatedWordText guibg=#2c313c")
-vim.cmd("hi def IlluminatedWordRead guibg=#2c313c")
-vim.cmd("hi def IlluminatedWordWrite guibg=#2c313c")
+vim.cmd("hi def IlluminatedWordText guibg=#383d47")
+vim.cmd("hi def IlluminatedWordRead guibg=#383d47")
+vim.cmd("hi def IlluminatedWordWrite guibg=#383d47")

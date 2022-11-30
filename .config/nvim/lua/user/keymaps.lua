@@ -53,7 +53,6 @@ keymap("n", "E", ":bp | sp | bn | bd <CR>", opts)
 
 -- File searching
 keymap("n", "<leader>f", "<cmd>Telescope find_files<cr>", opts)
-keymap("n", "<leader>r", "<cmd>Telescope frecency theme=ivy<cr>", opts)
 keymap("n", "<leader>g", "<cmd>Telescope live_grep<cr>", opts)
 keymap("n", "<leader>,", "<cmd>Telescope buffers<cr>", opts)
 keymap("n", "<leader>c", "<cmd>Telescope command_history<cr>", opts)

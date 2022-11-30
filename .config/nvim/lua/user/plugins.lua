@@ -92,16 +92,19 @@ return packer.startup(function(use)
 	-- Highlight other uses of the word under the cursor
 	use("RRethy/vim-illuminate")
 
-  -- Buffers
+	-- Buffers
 	use("akinsho/bufferline.nvim")
-  use("beauwilliams/focus.nvim")
+	use("beauwilliams/focus.nvim")
 
-  -- Git
-  use("tpope/vim-fugitive")
-  use("tpope/vim-rhubarb")
+	-- Git
+	use("tpope/vim-fugitive")
+	use("tpope/vim-rhubarb")
 
-  -- Motion
-  use("ThePrimeagen/harpoon")
+	-- Motion
+	use("ThePrimeagen/harpoon")
+
+	-- Find and Replace
+	use({ "s1n7ax/nvim-search-and-replace" })
 
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
