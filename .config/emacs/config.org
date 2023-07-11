@@ -1,0 +1,675 @@
+#+TITLE: GNU Emacs Config
+#+AUTHOR: Felipe Amorim
+#+DESCRIPTION: Personal Emacs config.
+#+STARTUP: overview
+
+* Table of Contents :toc:
+- [[#package-management][Package Management]]
+  - [[#use-package-configs][Use-package Configs]]
+  - [[#custom-scripts][Custom Scripts]]
+- [[#interface][Interface]]
+  - [[#gui][GUI]]
+  - [[#which-key][Which Key]]
+  - [[#ivy-counsel][Ivy (Counsel)]]
+  - [[#icons][Icons]]
+  - [[#doom-modeline][Doom modeline]]
+  - [[#fonts][Fonts]]
+  - [[#diminish][Diminish]]
+- [[#theming][Theming]]
+- [[#evil-mode][Evil Mode]]
+- [[#org-mode][Org Mode]]
+  - [[#basic-installation][Basic Installation]]
+  - [[#evil-org][Evil Org]]
+  - [[#bullets][Bullets]]
+  - [[#table-of-contents][Table of Contents]]
+  - [[#agenda][Agenda]]
+  - [[#attatchments][Attatchments]]
+  - [[#org-tempo][Org Tempo]]
+  - [[#org-behavior][Org Behavior]]
+- [[#development][Development]]
+  - [[#tab][Tab]]
+  - [[#commenting][Commenting]]
+  - [[#rainbow-mode][Rainbow Mode]]
+- [[#file-opening][File opening]]
+- [[#general-keybindings][General Keybindings]]
+- [[#terminals][Terminals]]
+  - [[#vterm][vterm]]
+  - [[#vterm-toggle][vterm-toggle]]
+- [[#directory-cleaning][Directory Cleaning]]
+- [[#others][Others]]
+
+* Package Management
+** Use-package Configs
+
+#+begin_src emacs-lisp
+(require 'package)
+
+(add-to-list 'package-archives '("elpa" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
+
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+
+(setq
+  use-package-always-ensure t ;; Makes sure to download new packages if they aren't already downloaded
+  use-package-verbose t) ;; Package install logging. Packages break, it's nice to know why.
+#+end_src
+
+** Custom Scripts
+#+begin_src emacs-lisp
+  (add-to-list 'load-path (expand-file-name "~/.config/emacs/scripts"))
+#+end_src
+
+* Interface
+** GUI
+
+#+begin_src emacs-lisp
+  ;; Hide Scroll bar,menu bar, tool bar
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+
+  ;; Line numbering but not to all modes
+  (dolist (mode '(
+     text-mode-hook
+     prog-mode-hook
+     conf-mode-hook))
+     (add-hook mode (lambda ()
+       (display-line-numbers-mode 1)
+       (setq display-line-numbers 'relative))
+     )
+  )
+
+  (dolist (mode '(
+     org-mode-hook
+     term-mode-hook
+     shell-mode-hook
+     treemacs-mode-hook
+     eshell-mode-hook))
+     (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+  ;; Open Emacs in fullscreen
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+  ;; Make ESC quit prompts
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
+
+** Which Key
+
+#+begin_src emacs-lisp
+(use-package which-key
+:diminish
+:ensure t
+:init
+  (which-key-mode 1)
+:config
+(setq which-key-side-window-location 'bottom
+   which-key-sort-order #'which-key-key-order-alpha
+   which-key-sort-uppercase-first nil
+   which-key-add-column-padding 1
+   which-key-max-display-columns nil
+   which-key-min-display-lines 6
+   which-key-side-window-slot -10
+   which-key-side-window-max-height 0.25
+   which-key-idle-delay 0.8
+   which-key-max-description-length 25
+   which-key-allow-imprecise-window-fit nil
+   which-key-separator " → " ))
+#+end_src
+
+** Ivy (Counsel)
+
+- =Ivy=, a generic completion mechanism for Emacs.
+- =Counsel=, a collection of Ivy-enhanced versions of common Emacs commands.
+- =Ivy-rich= allows us to add descriptions alongside the commands in M-x.
+
+#+begin_src emacs-lisp
+ (use-package counsel
+  :after ivy
+  :diminish
+  :config (counsel-mode))
+
+(use-package ivy
+  :diminish
+  :bind (("C-s" . swiper)
+    :map ivy-minibuffer-map
+    ("TAB" . ivy-alt-done)
+    ("C-l" . ivy-alt-done)
+    ("C-j" . ivy-next-line)
+    ("C-k" . ivy-previous-line)
+    :map ivy-switch-buffer-map
+    ("C-k" . ivy-previous-line)
+    ("C-l" . ivy-done)
+    ("C-d" . ivy-switch-buffer-kill)
+    :map ivy-reverse-i-search-map
+    ("C-k" . ivy-previous-line)
+    ("C-d" . ivy-reverse-i-search-kill))
+  :custom
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-count-format "(%d/%d) ")
+    (setq enable-recursive-minibuffers t)
+  :config
+  (ivy-mode))
+
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :init (all-the-icons-ivy-rich-mode 1))
+
+(use-package ivy-rich
+  :after ivy
+  :ensure t
+  :init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
+  :custom
+    (ivy-virtual-abbreviate 'full
+      ivy-rich-switch-buffer-align-virtual-buffer t
+      ivy-rich-path-style 'abbrev)
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich-switch-buffer-transformer)) 
+#+end_src
+
+** Icons
+#+begin_src emacs-lisp
+(use-package all-the-icons
+  :ensure t
+  :if (display-graphic-p))
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
+#+end_src
+** Doom modeline
+
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+)
+#+end_src
+
+** Fonts
+
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil :font "InconsolataGo Nerd Font Mono" :height 120)
+#+end_src
+** Diminish
+  
+With this package , you can add ‘:diminish’ to any use-package block
+to hide that particular mode in the modeline.
+  
+#+begin_src emacs-lisp
+(use-package diminish) 
+#+end_src 
+
+* Theming
+
+#+begin_src emacs-lisp
+(use-package doom-themes
+  :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-acario-dark t)
+  ;;(load-theme 'doom-challenger-deep t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-acario-dark") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+  ;; you can check more doom themes here
+  ;; https://github.com/doomemacs/themes/tree/screenshots
+
+  ;; you can try themes with M-x -> load themes
+#+end_src
+
+* Evil Mode
+#+begin_src emacs-lisp
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    (setq evil-want-C-u-scroll t)
+    (setq evil-want-C-i-jump nil)
+    :config
+    (evil-mode 1)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state))
+
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+
+  (define-key evil-normal-state-map (kbd "W") 'save-buffer)
+  (define-key evil-normal-state-map (kbd "E") 'kill-this-buffer)
+  (define-key evil-normal-state-map (kbd ",,") 'ibuffer)
+  (define-key evil-normal-state-map (kbd ",f") 'find-file)
+  (define-key evil-normal-state-map (kbd ",r") 'recentf-open-files)
+  (define-key evil-normal-state-map (kbd ",n") 'org-roam-node-find)
+  (define-key evil-normal-state-map (kbd ",3") 'treemacs)
+  (define-key evil-normal-state-map (kbd "F12") 'next-buffer)
+  (define-key evil-normal-state-map (kbd "F11") 'previous-buffer)
+  (define-key evil-normal-state-map (kbd ",c") 'cfw:open-org-calendar)
+  (define-key evil-normal-state-map (kbd ",l") 'org-roam-buffer-toggle)
+  (define-key evil-normal-state-map (kbd ",v") 'eval-last-sexp)
+#+end_src
+
+* Org Mode
+** Basic Installation
+
+#+begin_src emacs-lisp
+  (setq org-directory "~/.config/emacs/notes")
+
+  (use-package org
+    :ensure t)
+#+end_src
+
+** Evil Org
+
+#+begin_src emacs-lisp
+  ;; fix https://github.com/Somelauw/evil-org-mode/issues/93
+  (fset 'evil-redirect-digit-argument 'ignore) ;; before evil-org loaded
+
+  (evil-define-key 'motion 'evil-org-mode
+      (kbd "0") 'evil-org-beginning-of-line)
+  ;; end of the fix
+
+  (use-package evil-org
+    :ensure t
+    :after org
+    :hook (org-mode . (lambda () evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+
+#+end_src
+
+** Bullets
+
+#+begin_src emacs-lisp
+   (add-hook 'org-mode-hook 'org-indent-mode)
+   (use-package org-bullets)
+   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+
+** Table of Contents
+
+#+begin_src emacs-lisp
+   (use-package toc-org
+    :ensure t
+    :commands toc-org-enable
+    :init (add-hook 'org-mode-hook 'toc-org-enable))
+
+#+end_src
+
+** Agenda
+
+#+begin_src emacs-lisp
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-done 'time)
+(setq org-log-reschedule "note")
+(setq org-log-into-drawer t)
+(setq org-agenda-files '("/home/sasaki/.config/emacs/notes/"))
+(setq org-agenda-span 10
+      org-agenda-start-on-weekday nil
+      org-agenda-start-day "-3d")
+
+(setq org-agenda-block-separator 8411)
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+(setq org-agenda-custom-commands
+  '(("z" "Agenda"
+     ((agenda ""
+       ((org-agenda-span 10)
+         (org-agenda-start-on-weekday nil)
+         (org-agenda-start-day "-3d")
+       ))
+      (todo "TODO"
+        ((org-agenda-overriding-header "Unscheduled tasks")
+         (org-agenda-files '("/home/sasaki/.config/emacs/notes/"))
+         (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
+         )
+      )
+      )
+    )
+  )
+)
+#+end_src
+
+** Attatchments
+#+begin_src emacs-lisp
+  (setq org-attach-follow-link nil)
+#+end_src
+
+** Org Tempo
+  
+Org Tempo is a builting package that help us to handle different kinds
+of source blocks. With org-tempo we can type =<s= and generate a
+source block easily.
+  
+| Typing the below + TAB | Expands to ...                          |
+|------------------------+-----------------------------------------|
+| <a                     | '#+BEGIN_EXPORT ascii' … '#+END_EXPORT  |
+| <c                     | '#+BEGIN_CENTER' … '#+END_CENTER'       |
+| <C                     | '#+BEGIN_COMMENT' … '#+END_COMMENT'     |
+| <e                     | '#+BEGIN_EXAMPLE' … '#+END_EXAMPLE'     |
+| <E                     | '#+BEGIN_EXPORT' … '#+END_EXPORT'       |
+| <h                     | '#+BEGIN_EXPORT html' … '#+END_EXPORT'  |
+| <l                     | '#+BEGIN_EXPORT latex' … '#+END_EXPORT' |
+| <q                     | '#+BEGIN_QUOTE' … '#+END_QUOTE'         |
+| <s                     | '#+BEGIN_SRC' … '#+END_SRC'             |
+| <v                     | '#+BEGIN_VERSE' … '#+END_VERSE'         |
+  
+#+begin_src emacs-lisp
+(require 'org-tempo) 
+#+end_src
+
+** Org Behavior
+Replace default ellipsis with an icon.
+  
+#+begin_src emacs-lisp
+(setq org-ellipsis "↴")
+#+end_src
+
+About the =inline-image feature=: If you use this setting and don’t want
+to see images in a specific file, add this at the top of the org files
+that are not to display images: =+STARTUP: noinlineimages=
+
+#+begin_src emacs-lisp
+(setq org-startup-with-inline-images t)
+#+end_src
+  
+Follow org mode links by pressing the ENTER key and be able to go back with BACKSPACE.
+
+#+begin_src emacs-lisp
+; follow org mode links pressing the ENTER key
+(with-eval-after-load 'evil-maps
+(define-key evil-motion-state-map (kbd "RET") nil))
+
+; Go back after follow a link
+(setq org-return-follows-link t)
+(define-key global-map [(control backspace)] 'org-mark-ring-goto)
+#+end_src
+
+Center org mode content in the middle of the screen.
+
+#+begin_src emacs-lisp
+(defun efs/org-mode-visual-fill ()
+  (setq visual-fill-column-width 140
+    visual-fill-column-center-text t)
+  (visual-fill-column-mode 1)
+)
+
+(use-package visual-fill-column
+  :hook (org-mode . efs/org-mode-visual-fill)
+)
+#+end_src
+
+Autosave org buffers when something change (manually or automatically).
+
+#+begin_src emacs-lisp
+  (setq auto-save-default t
+        auto-revert-use-notify nil
+        auto-revert-verbose nil)
+
+  (global-auto-revert-mode 1)
+
+  (defmacro func-ignore (fnc)
+    "Return function that ignores its arguments and invokes FNC."
+    `(lambda (&rest _rest)
+      (funcall ,fnc)))
+
+  (advice-add 'org-deadline       :after (func-ignore #'org-save-all-org-buffers))
+  (advice-add 'org-schedule       :after (func-ignore #'org-save-all-org-buffers))
+  (advice-add 'org-store-log-note :after (func-ignore #'org-save-all-org-buffers))
+  (advice-add 'org-todo           :after (func-ignore #'org-save-all-org-buffers))
+
+#+end_src
+  
+Disable org mode auto indent.
+
+#+begin_src emacs-lisp
+(electric-indent-mode -1)
+(setq org-edit-src-content-indentation 0)
+#+end_src
+
+Enable text wrapping.
+
+#+begin_src emacs-lisp
+(toggle-truncate-lines 1)
+#+end_src
+
+* Development
+** Tab
+Configuring tab to be equals to two epaces
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 2)
+  (setq indent-line-function 'insert-tab)
+#+end_src
+
+** Commenting
+#+begin_src emacs-lisp
+  (use-package evil-nerd-commenter
+    :bind ("C-/" . evilnc-comment-or-uncomment-lines))
+#+end_src
+
+** Rainbow Mode
+
+Display the actual color as a background for any hex color value
+(ex. #ffffff).  The code block below enables rainbow-mode in all
+programming modes (prog-mode) as well as org-mode.
+
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+  :diminish
+  :hook org-mode prog-mode)
+#+end_src
+
+* File opening
+#+begin_src emacs-lisp
+(use-package openwith)
+(setq openwith-associations
+  (list
+  (list (openwith-make-extension-regexp
+          '("mpg" "mpeg" "mp3" "mp4" "m4v"
+            "avi" "wmv" "wav" "mov" "flv"
+            "ogm" "ogg" "mkv" "webm"))
+        "mpv"
+        '(file))
+  (list (openwith-make-extension-regexp
+          '("xbm" "pbm" "pgm" "ppm" "pnm"
+            "png" "gif" "bmp" "tif" "jpeg" "jpg" "webp"))
+        "sxiv -a"
+        '(file))
+  (list (openwith-make-extension-regexp
+          '("pdf"))
+        "okular"
+        '(file))))
+
+(openwith-mode 1)
+
+;; suppress large file prompt
+(setq large-file-warning-threshold nil)
+#+end_src
+
+* General Keybindings
+
+#+begin_src emacs-lisp
+;; (load "~/.config/emacs/scripts/buffer-move")
+(require 'buffer-move) 
+
+(defun open-config-file ()
+  "Open a specific file."
+  (interactive)
+  (find-file "~/.config/emacs/config.org")
+)
+
+(defun reload-init-file ()
+  (interactive)
+  (load-file user-init-file)
+  (load-file user-init-file)
+)
+  
+(defun org-agenda-custom-view ()
+  (interactive)
+  (org-agenda nil "z")
+)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package general
+  :config
+  (general-evil-setup)
+
+  ;; set up 'SPC' as the global leader key
+  (general-create-definer felipe/leader-keys
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC" ;; set leader
+    :global-prefix "M-SPC") ;; access leader in insert mode
+
+  (felipe/leader-keys
+    "SPC" '(counsel-M-x :wk "Counsel M-x")
+  )
+  (felipe/leader-keys
+    "b" '(:ignore t :wk "Buffer")
+    "b b" '(switch-to-buffer :wk "Switch buffer")
+    "b i" '(ibuffer :wk "Ibuffer")
+    "b k" '(kill-this-buffer :wk "Kill this buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+  )
+  (felipe/leader-keys
+    "e" '(:ignore t :wk "Evaluate")    
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e r" '(eval-region :wk "Evaluate elisp in region")
+  ) 
+  (felipe/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h v" '(describe-variable :wk "Describe variable")
+  )
+  (felipe/leader-keys
+    "f" '(:ignore t :wk "Find")
+    "f f" '(find-file :wk "Find file")
+    "f r" '(counsel-recentf :wk "Find recent files")
+    "f s" '(sudo-edit-find-file :wk "Find file and open with sudo")
+  )
+  (felipe/leader-keys
+    "w" '(:ignore t :wk "Windows")
+    ;; Window splits
+    "w c" '(evil-window-delete :wk "Close window")
+    "w n" '(evil-window-new :wk "New window")
+    "w s" '(evil-window-split :wk "Horizontal split window")
+    "w v" '(evil-window-vsplit :wk "Vertical split window")
+    ;; Window motions
+    "w h" '(evil-window-left :wk "Window left")
+    "w j" '(evil-window-down :wk "Window down")
+    "w k" '(evil-window-up :wk "Window up")
+    "w l" '(evil-window-right :wk "Window right")
+    "w w" '(evil-window-next :wk "Goto next window")
+    ;; Move Windows
+    "w H" '(buf-move-left :wk "Buffer move left")
+    "w J" '(buf-move-down :wk "Buffer move down")
+    "w K" '(buf-move-up :wk "Buffer move up")
+    "w L" '(buf-move-right :wk "Buffer move right"))
+  (felipe/leader-keys
+    "t" '(:ignore t :wk "Toggle")
+    "t v" '(vterm-toggle :wk "Toggle vterm"))
+  (felipe/leader-keys
+    "o" '(:ignore t :wk "Org")
+    "o t" '(org-todo :wk "Org todo")
+    "o i" '(org-toggle-item :wk "Org toggle item")
+    "o g" '(org-babel-tangle :wk "Org babel tangle")
+    "o a" '(org-agenda-custom-view :wk "Org agenda")
+  )
+  (felipe/leader-keys
+    "c" '(:ignore t :wk "Config")
+    "c f" '(open-config-file :wk "Open Emacs config file")
+    "c r" '(reload-init-file :wk "Reload emacs config")
+  )
+)
+#+end_src
+
+* Terminals
+** vterm
+
+#+begin_src emacs-lisp
+(use-package vterm
+  :config
+    (setq vterm-max-scrollback 5000
+      shell-file-name "/usr/bin/zsh"
+    )
+)
+#+end_src 
+
+** vterm-toggle
+  
+#+begin_src emacs-lisp  
+(use-package vterm-toggle
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+               '((lambda (buffer-or-name _)
+                     (let ((buffer (get-buffer buffer-or-name)))
+                       (with-current-buffer buffer
+                         (or (equal major-mode 'vterm-mode)
+                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                  (display-buffer-reuse-window display-buffer-at-bottom)
+                  ;;(display-buffer-reuse-window display-buffer-in-direction)
+                  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                  ;;(direction . bottom)
+                  ;;(dedicated . t) ;dedicated is supported in emacs27
+                  (reusable-frames . visible)
+                  (window-height . 0.3))))
+#+end_src 
+
+* Directory Cleaning
+  
+If the package bellow doesnt work, try [[https://systemcrafters.net/emacs-from-scratch/the-best-default-settings][this]].
+  
+#+begin_example emacs-lisp
+(use-package no-littering)
+#+end_example 
+  
+* Others
+
+#+begin_src emacs-lisp
+(setq 
+  org-default-notes-file "/home/sasaki/.config/emacs/notes/tasks.org"
+  initial-buffer-choice  org-default-notes-file)
+  
+;; remember when you were in a file
+(save-place-mode 1)
+  
+;; dont pop up UI dialogs when prompting
+(setq use-dialog-box nil)
+  
+;; automatically update buffers when the file change
+(global-auto-revert-mode 1)
+
+;; automatically update dired when the filesystem change
+(setq global-auto-revert-non-file-buffers t)
+  
+;; sudo editing
+(use-package sudo-edit)
+#+end_src
+  
