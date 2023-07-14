@@ -12,7 +12,7 @@
   - [[#which-key][Which Key]]
   - [[#ivy-counsel][Ivy (Counsel)]]
   - [[#icons][Icons]]
-  - [[#doom-modeline][Doom modeline]]
+  - [[#doom-modeline][Doom Modeline]]
   - [[#fonts][Fonts]]
   - [[#diminish][Diminish]]
 - [[#theming][Theming]]
@@ -23,8 +23,12 @@
   - [[#bullets][Bullets]]
   - [[#table-of-contents][Table of Contents]]
   - [[#agenda][Agenda]]
-  - [[#attatchments][Attatchments]]
+  - [[#attachments][Attachments]]
   - [[#org-tempo][Org Tempo]]
+  - [[#balance-window-margins][Balance Window Margins]]
+  - [[#line-spacing][Line Spacing]]
+  - [[#org-roam][Org Roam]]
+  - [[#images][Images]]
   - [[#org-behavior][Org Behavior]]
 - [[#development][Development]]
   - [[#tab][Tab]]
@@ -36,6 +40,11 @@
   - [[#vterm][vterm]]
   - [[#vterm-toggle][vterm-toggle]]
 - [[#directory-cleaning][Directory Cleaning]]
+  - [[#changing-the-location-of-the-custom-file][Changing the location of the "custom file"]]
+  - [[#backup-files][Backup Files]]
+  - [[#auto-save-files][Auto Save Files]]
+  - [[#lock-files][Lock Files]]
+  - [[#files-created-by-packages][Files created by packages]]
 - [[#others][Others]]
 
 * Package Management
@@ -70,35 +79,42 @@
 ** GUI
 
 #+begin_src emacs-lisp
-  ;; Hide Scroll bar,menu bar, tool bar
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
+;; Hide Scroll bar,menu bar, tool bar
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
 
-  ;; Line numbering but not to all modes
-  (dolist (mode '(
-     text-mode-hook
-     prog-mode-hook
-     conf-mode-hook))
-     (add-hook mode (lambda ()
-       (display-line-numbers-mode 1)
-       (setq display-line-numbers 'relative))
-     )
-  )
+;; Line numbering but not to all modes
+(dolist (mode '(
+   text-mode-hook
+   prog-mode-hook
+   conf-mode-hook))
+   (add-hook mode (lambda ()
+     (display-line-numbers-mode 1)
+     (setq display-line-numbers 'relative))
+   )
+)
 
-  (dolist (mode '(
-     org-mode-hook
-     term-mode-hook
-     shell-mode-hook
-     treemacs-mode-hook
-     eshell-mode-hook))
-     (add-hook mode (lambda () (display-line-numbers-mode 0))))
+(dolist (mode '(
+   org-mode-hook
+   term-mode-hook
+   shell-mode-hook
+   treemacs-mode-hook
+   eshell-mode-hook))
+   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
-  ;; Open Emacs in fullscreen
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; Open Emacs in fullscreen
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-  ;; Make ESC quit prompts
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+;; Make ESC quit prompts
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  
+;; Line cursor and no blink
+(set-default 'cursor-type  '(bar . 1))
+(blink-cursor-mode 0)
+  
+;; Underline line at descent position, not baseline position
+(setq x-underline-at-descent-line t)
 #+end_src
 
 ** Which Key
@@ -115,11 +131,11 @@
    which-key-sort-uppercase-first nil
    which-key-add-column-padding 1
    which-key-max-display-columns nil
-   which-key-min-display-lines 6
+   which-key-min-display-lines 8
    which-key-side-window-slot -10
    which-key-side-window-max-height 0.25
    which-key-idle-delay 0.8
-   which-key-max-description-length 25
+   which-key-max-description-length 35
    which-key-allow-imprecise-window-fit nil
    which-key-separator " → " ))
 #+end_src
@@ -173,6 +189,11 @@
   :config
   (ivy-set-display-transformer 'ivy-switch-buffer
                                'ivy-rich-switch-buffer-transformer)) 
+  
+;; smex makes counsel-m-x remember last used commands
+(use-package smex
+  :ensure t
+)
 #+end_src
 
 ** Icons
@@ -184,7 +205,7 @@
 (use-package all-the-icons-dired
   :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
 #+end_src
-** Doom modeline
+** Doom Modeline
 
 #+begin_src emacs-lisp
 (use-package doom-modeline
@@ -196,7 +217,7 @@
 ** Fonts
 
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :font "InconsolataGo Nerd Font Mono" :height 120)
+(set-face-attribute 'default nil :font "InconsolataGo Nerd Font Mono" :height 120)
 #+end_src
 ** Diminish
   
@@ -271,8 +292,6 @@ to hide that particular mode in the modeline.
 ** Basic Installation
 
 #+begin_src emacs-lisp
-  (setq org-directory "~/.config/emacs/notes")
-
   (use-package org
     :ensure t)
 #+end_src
@@ -322,7 +341,7 @@ to hide that particular mode in the modeline.
 (setq org-log-done 'time)
 (setq org-log-reschedule "note")
 (setq org-log-into-drawer t)
-(setq org-agenda-files '("/home/sasaki/.config/emacs/notes/"))
+(setq org-agenda-files '("/home/sasaki/.config/emacs/agenda/"))
 (setq org-agenda-span 10
       org-agenda-start-on-weekday nil
       org-agenda-start-day "-3d")
@@ -339,7 +358,7 @@ to hide that particular mode in the modeline.
        ))
       (todo "TODO"
         ((org-agenda-overriding-header "Unscheduled tasks")
-         (org-agenda-files '("/home/sasaki/.config/emacs/notes/"))
+         (org-agenda-files '("/home/sasaki/.config/emacs/agenda/"))
          (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))
          )
       )
@@ -349,9 +368,15 @@ to hide that particular mode in the modeline.
 )
 #+end_src
 
-** Attatchments
+** Attachments
 #+begin_src emacs-lisp
-  (setq org-attach-follow-link nil)
+(setq org-attach-directory "~/.config/emacs/attachments")
+
+;; hit C-c C-l to create a link to the attached file
+(setq org-attach-store-link-p 'attached)
+
+;; attachment tag
+(setq org-attach-auto-tag "ATTACHMENT")
 #+end_src
 
 ** Org Tempo
@@ -377,34 +402,9 @@ source block easily.
 (require 'org-tempo) 
 #+end_src
 
-** Org Behavior
-Replace default ellipsis with an icon.
-  
-#+begin_src emacs-lisp
-(setq org-ellipsis "↴")
-#+end_src
+** Balance Window Margins
 
-About the =inline-image feature=: If you use this setting and don’t want
-to see images in a specific file, add this at the top of the org files
-that are not to display images: =+STARTUP: noinlineimages=
-
-#+begin_src emacs-lisp
-(setq org-startup-with-inline-images t)
-#+end_src
-  
-Follow org mode links by pressing the ENTER key and be able to go back with BACKSPACE.
-
-#+begin_src emacs-lisp
-; follow org mode links pressing the ENTER key
-(with-eval-after-load 'evil-maps
-(define-key evil-motion-state-map (kbd "RET") nil))
-
-; Go back after follow a link
-(setq org-return-follows-link t)
-(define-key global-map [(control backspace)] 'org-mark-ring-goto)
-#+end_src
-
-Center org mode content in the middle of the screen.
+Center org mode content in the middle of the screen and other UI improvements for writing.
 
 #+begin_src emacs-lisp
 (defun efs/org-mode-visual-fill ()
@@ -415,7 +415,159 @@ Center org mode content in the middle of the screen.
 
 (use-package visual-fill-column
   :hook (org-mode . efs/org-mode-visual-fill)
+) 
+
+(use-package olivetti
+  :ensure t
 )
+
+(add-hook 'org-mode-hook 'olivetti-mode)
+#+end_src
+
+** Line Spacing
+  
+#+begin_src emacs-lisp  
+(defun org-mode-line-spacing ()
+  "Set some line spacing between lines for org mode files"
+  (setq-default line-spacing 1))
+
+(add-hook 'org-mode-hook 'org-mode-line-spacing)
+#+end_src 
+
+** Org Roam
+*** Requirements
+org-roam requires the following packages on your host operating system:
+
+- =gcc=
+- =sqlite3=
+
+*** Basic configuration
+
+You can sync org-roam database with the command =org-roam-db-autosync-mode=.
+
+#+begin_src emacs-lisp
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "~/.config/emacs/roam-notes"))
+
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+#+end_src
+  
+*** Journaling:
+
+#+begin_src emacs-lisp
+(setq org-roam-dailies-directory "journal/")
+  
+;; Adding the time to each entry
+
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry "* %<%H:%M>: %?"
+         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
+#+end_src
+  
+*** Keep backlinks buffer open
+
+You can read more about this [[https://github.com/org-roam/org-roam/issues/507][here]].
+
+#+begin_src emacs-lisp
+(defun tim/org-roam-buffer-show (_)
+  (if (and
+        ;; Don't do anything if we're in the minibuffer or in the calendar
+        (not (minibufferp))
+        (not (derived-mode-p 'calendar-mode))
+        ;; Show org-roam buffer iff the current buffer has a org-roam file
+        (xor (org-roam-file-p) (eq 'visible (org-roam-buffer--visibility)))
+      )
+
+      (org-roam-buffer-toggle)
+  )
+)
+
+(add-hook 'window-buffer-change-functions 'tim/org-roam-buffer-show)
+#+end_src 
+
+*** Org-roam backlinks
+
+Setting the buffer styling:
+
+#+begin_src emacs-lisp
+(add-to-list 'display-buffer-alist
+  '("\\*org-roam\\*"
+     (display-buffer-in-direction)
+     (direction . right)
+     (window-width . 0.15)
+     (window-height . fit-window-to-buffer)
+   )
+)
+#+end_src
+
+*** Fast note insertion
+The code bellow insert a org-roam node link in the current document without open a new buffer.
+  
+#+begin_src emacs-lisp
+(defun org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (cons arg args))
+    (org-roam-capture-templates (list (append (car org-roam-capture-templates) '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)
+   )
+) 
+#+end_src 
+
+** Images
+  
+About the =inline-image feature=: If you use this setting and don’t want
+to see images in a specific file, add this at the top of the org files
+that are not to display images: =+STARTUP: noinlineimages=
+
+#+begin_src emacs-lisp
+(setq org-startup-with-inline-images t)
+#+end_src
+  
+Setting up =org-download.
+
+#+begin_src emacs-lisp  
+(use-package org-download
+  :ensure t
+)
+  
+(setq-default org-download-image-dir "~/.config/emacs/images")
+
+;; Drag-and-drop to `dired`
+(add-hook 'dired-mode-hook 'org-download-enable)
+#+end_src 
+  
+Setting image thumb scale.
+  
+#+begin_src emacs-lisp  
+(setq org-image-actual-width 300)
+(setq org-download-image-org-width 300)
+#+end_src 
+
+** Org Behavior
+Replace default ellipsis with an icon.
+  
+#+begin_src emacs-lisp
+(setq org-ellipsis "↴")
+#+end_src
+
+Follow org mode links by pressing the ENTER key and be able to go back with BACKSPACE.
+
+#+begin_src emacs-lisp
+; follow org mode links pressing the ENTER key
+(with-eval-after-load 'evil-maps
+(define-key evil-motion-state-map (kbd "RET") nil))
+
+; Go back after follow a link
+(setq org-return-follows-link t)
+(define-key global-map [(control backspace)] 'org-mark-ring-goto)
 #+end_src
 
 Autosave org buffers when something change (manually or automatically).
@@ -446,10 +598,10 @@ Disable org mode auto indent.
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
-Enable text wrapping.
+Hide emphasis markers
 
 #+begin_src emacs-lisp
-(toggle-truncate-lines 1)
+(setq org-hide-emphasis-markers t)
 #+end_src
 
 * Development
@@ -493,7 +645,7 @@ programming modes (prog-mode) as well as org-mode.
         '(file))
   (list (openwith-make-extension-regexp
           '("xbm" "pbm" "pgm" "ppm" "pnm"
-            "png" "gif" "bmp" "tif" "jpeg" "jpg" "webp"))
+            "gif" "bmp" "tif"))
         "sxiv -a"
         '(file))
   (list (openwith-make-extension-regexp
@@ -517,6 +669,12 @@ programming modes (prog-mode) as well as org-mode.
   "Open a specific file."
   (interactive)
   (find-file "~/.config/emacs/config.org")
+)
+
+(defun open-tasks-file ()
+  "Open a specific file."
+  (interactive)
+  (find-file "~/.config/emacs/agenda/tasks.org")
 )
 
 (defun reload-init-file ()
@@ -548,8 +706,7 @@ programming modes (prog-mode) as well as org-mode.
   )
   (felipe/leader-keys
     "b" '(:ignore t :wk "Buffer")
-    "b b" '(switch-to-buffer :wk "Switch buffer")
-    "b i" '(ibuffer :wk "Ibuffer")
+    "b b" '(ibuffer :wk "Swich to buffer")
     "b k" '(kill-this-buffer :wk "Kill this buffer")
     "b n" '(next-buffer :wk "Next buffer")
     "b p" '(previous-buffer :wk "Previous buffer")
@@ -562,14 +719,15 @@ programming modes (prog-mode) as well as org-mode.
   ) 
   (felipe/leader-keys
     "h" '(:ignore t :wk "Help")
-    "h f" '(describe-function :wk "Describe function")
-    "h v" '(describe-variable :wk "Describe variable")
+    "h f" '(counsel-describe-function :wk "Describe function")
+    "h v" '(counsel-describe-variable :wk "Describe variable")
   )
   (felipe/leader-keys
     "f" '(:ignore t :wk "Find")
-    "f f" '(find-file :wk "Find file")
+    "f f" '(counsel-find-file :wk "Find file")
     "f r" '(counsel-recentf :wk "Find recent files")
-    "f s" '(sudo-edit-find-file :wk "Find file and open with sudo")
+    "f s" '(sudo-edit-find-file :wk "Find file with sudo")
+    "f n" '(org-roam-node-find :wk "Find Org Roam node")
   )
   (felipe/leader-keys
     "w" '(:ignore t :wk "Windows")
@@ -594,15 +752,31 @@ programming modes (prog-mode) as well as org-mode.
     "t v" '(vterm-toggle :wk "Toggle vterm"))
   (felipe/leader-keys
     "o" '(:ignore t :wk "Org")
-    "o t" '(org-todo :wk "Org todo")
     "o i" '(org-toggle-item :wk "Org toggle item")
     "o g" '(org-babel-tangle :wk "Org babel tangle")
-    "o a" '(org-agenda-custom-view :wk "Org agenda")
+    "o s" '(org-schedule :wk "Org schedule")
+  )
+  (felipe/leader-keys
+    "n" '(:ignore t :wk "Org Roam")
+    "n f" '(org-roam-node-find :wk "Find node")
+    "n i" '(org-roam-node-insert-immediate :wk "Insert node")
+    "n j" '(org-roam-dailies-capture-today :wk "Create a journal for today")
+    "n t" '(org-roam-dailies-goto-today :wk "Go to today's journal")
   )
   (felipe/leader-keys
     "c" '(:ignore t :wk "Config")
     "c f" '(open-config-file :wk "Open Emacs config file")
     "c r" '(reload-init-file :wk "Reload emacs config")
+  )
+  (felipe/leader-keys
+    "t" '(:ignore t :wk "Org Attachments")
+    "t i" '(org-attach-attach-cp :wk "Insert an attachment")
+    "t l" '(org-insert-link :wk "Add link to attachment")
+  )
+  (felipe/leader-keys
+    "a" '(:ignore t :wk "Org Agenda")
+    "a o" '(org-agenda-custom-view :wk "Open agenda")
+    "a t" '(open-tasks-file :wk "Open tasks list")
   )
 )
 #+end_src
@@ -643,18 +817,58 @@ programming modes (prog-mode) as well as org-mode.
 #+end_src 
 
 * Directory Cleaning
-  
-If the package bellow doesnt work, try [[https://systemcrafters.net/emacs-from-scratch/the-best-default-settings][this]].
+
+** Changing the location of the "custom file"
+
+To avoid having Emacs place variables into your hand-crafted =init.el= file, you can use this snippet: 
   
 #+begin_example emacs-lisp
-(use-package no-littering)
+(setq custom-file (locate-user-emacs-file "custom-vars.el"))
+(load custom-file 'noerror 'nomessage)
 #+end_example 
-  
+
+** Backup Files
+
+Saving backup files in a dedicated directory
+
+#+begin_src emacs-lisp
+(setq backup-directory-alist `(("." . ,(expand-file-name "tmp/backups/" user-emacs-directory))))
+#+end_src
+
+** Auto Save Files
+
+Saving auto save files, like =#Emacs.org#= in a dedicated diretory
+
+#+begin_example emacs-lisp
+;; auto-save-mode doesn't create the path automatically. thus, we are creating here
+(make-directory (expand-file-name "tmp/auto-saves/" user-emacs-directory) t)
+
+(setq auto-save-list-file-prefix (expand-file-name "tmp/auto-saves/sessions/" user-emacs-directory)
+      auto-save-file-name-transforms `((".*" ,(expand-file-name "tmp/auto-saves/" user-emacs-directory) t)))
+#+end_example
+
+** Lock Files
+
+These are the files that look like =.#Emacs.org=. They appear when you have unsaved changes to a file in a buffer. Unfortunately these can’t be moved, but they can be disabled:
+
+#+begin_example emacs-lisp
+(setq create-lockfiles nil)
+#+end_example
+
+** Files created by packages
+
+Projectile, lsp-mode, and other packages create their own files to store variables and state. The fix bellow tries to handle that but it might not work in all situations.
+
+#+begin_example emacs-lisp
+(setq projectile-known-projects-file (expand-file-name "tmp/projectile-bookmarks.eld" user-emacs-directory)
+      lsp-session-file (expand-file-name "tmp/.lsp-session-v1" user-emacs-directory))
+#+end_example
+
 * Others
 
 #+begin_src emacs-lisp
 (setq 
-  org-default-notes-file "/home/sasaki/.config/emacs/notes/tasks.org"
+  org-default-notes-file "/home/sasaki/.config/emacs/agenda/tasks.org"
   initial-buffer-choice  org-default-notes-file)
   
 ;; remember when you were in a file
