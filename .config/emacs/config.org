@@ -30,15 +30,19 @@
   - [[#org-roam][Org Roam]]
   - [[#images][Images]]
   - [[#org-behavior][Org Behavior]]
+  - [[#org-web-tools][Org Web Tools]]
+  - [[#auto-save][Auto Save]]
 - [[#development][Development]]
   - [[#tab][Tab]]
   - [[#commenting][Commenting]]
   - [[#rainbow-mode][Rainbow Mode]]
+  - [[#projectile][Projectile]]
 - [[#file-opening][File opening]]
 - [[#general-keybindings][General Keybindings]]
 - [[#terminals][Terminals]]
   - [[#vterm][vterm]]
   - [[#vterm-toggle][vterm-toggle]]
+  - [[#multi-vterm][multi-vterm]]
 - [[#directory-cleaning][Directory Cleaning]]
   - [[#changing-the-location-of-the-custom-file][Changing the location of the "custom file"]]
   - [[#backup-files][Backup Files]]
@@ -108,13 +112,6 @@
 
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-  
-;; Line cursor and no blink
-(set-default 'cursor-type  '(bar . 1))
-(blink-cursor-mode 0)
-  
-;; Underline line at descent position, not baseline position
-(setq x-underline-at-descent-line t)
 #+end_src
 
 ** Which Key
@@ -204,13 +201,24 @@
 
 (use-package all-the-icons-dired
   :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
+
+#+end_src
+
+Remember to run =nerd-icons-install-fonts= after installing =nerd-icons=.
+
+#+begin_src emacs-lisp
+(use-package nerd-icons
+  :ensure t
+)
 #+end_src
 ** Doom Modeline
-
+  
 #+begin_src emacs-lisp
 (use-package doom-modeline
   :ensure t
   :init (doom-modeline-mode 1)
+  :custom
+    (setq doom-modeline-buffer-encoding nil)
 )
 #+end_src
 
@@ -237,7 +245,7 @@ to hide that particular mode in the modeline.
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-acario-dark t)
+  (load-theme 'doom-Iosvkem t)
   ;;(load-theme 'doom-challenger-deep t)
 
   ;; Enable flashing mode-line on errors
@@ -245,7 +253,7 @@ to hide that particular mode in the modeline.
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-acario-dark") ; use "doom-colors" for less minimal icon theme
+  (setq doom-themes-treemacs-theme "doom-Iosvkem") ; use "doom-colors" for less minimal icon theme
   (doom-themes-treemacs-config)
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
@@ -570,14 +578,12 @@ Follow org mode links by pressing the ENTER key and be able to go back with BACK
 (define-key global-map [(control backspace)] 'org-mark-ring-goto)
 #+end_src
 
-Autosave org buffers when something change (manually or automatically).
+Autosave org buffers (related to tasks and agenda) when something change (manually or automatically).
 
 #+begin_src emacs-lisp
   (setq auto-save-default t
         auto-revert-use-notify nil
         auto-revert-verbose nil)
-
-  (global-auto-revert-mode 1)
 
   (defmacro func-ignore (fnc)
     "Return function that ignores its arguments and invokes FNC."
@@ -602,6 +608,20 @@ Hide emphasis markers
 
 #+begin_src emacs-lisp
 (setq org-hide-emphasis-markers t)
+#+end_src
+
+** Org Web Tools
+
+#+begin_src emacs-lisp
+(use-package org-web-tools
+  :ensure t
+)
+#+end_src
+
+** Auto Save
+
+#+begin_src emacs-lisp
+(add-hook 'auto-save-hook 'org-save-all-org-buffers)
 #+end_src
 
 * Development
@@ -631,6 +651,10 @@ programming modes (prog-mode) as well as org-mode.
   :diminish
   :hook org-mode prog-mode)
 #+end_src
+
+** Projectile
+
+To do...
 
 * File opening
 #+begin_src emacs-lisp
@@ -746,10 +770,15 @@ programming modes (prog-mode) as well as org-mode.
     "w H" '(buf-move-left :wk "Buffer move left")
     "w J" '(buf-move-down :wk "Buffer move down")
     "w K" '(buf-move-up :wk "Buffer move up")
-    "w L" '(buf-move-right :wk "Buffer move right"))
+    "w L" '(buf-move-right :wk "Buffer move right")
+  )
   (felipe/leader-keys
     "t" '(:ignore t :wk "Toggle")
-    "t v" '(vterm-toggle :wk "Toggle vterm"))
+    "t t" '(multi-vterm-dedicated-toggle :wk "Toggle terminal")
+    "t o" '(multi-vterm :wk "Open new terminal")
+    "t n" '(multi-vterm-next :wk "Go to the next terminal")
+    "t p" '(multi-vterm-prev :wk "Go to the previous terminal")
+  )
   (felipe/leader-keys
     "o" '(:ignore t :wk "Org")
     "o i" '(org-toggle-item :wk "Org toggle item")
@@ -777,6 +806,10 @@ programming modes (prog-mode) as well as org-mode.
     "a" '(:ignore t :wk "Org Agenda")
     "a o" '(org-agenda-custom-view :wk "Open agenda")
     "a t" '(open-tasks-file :wk "Open tasks list")
+  )
+  (felipe/leader-keys
+    "w" '(:ignore t :wk "Web Tools")
+    "w p" '(org-web-tools-insert-link-for-url :wk "Paste HTTP URL and extract page title")
   )
 )
 #+end_src
@@ -816,6 +849,45 @@ programming modes (prog-mode) as well as org-mode.
                   (window-height . 0.3))))
 #+end_src 
 
+** multi-vterm
+
+#+begin_src emacs-lisp
+(use-package multi-vterm
+  :ensure t
+	:config
+	(add-hook 'vterm-mode-hook
+			(lambda ()
+			(setq-local evil-insert-state-cursor 'box)
+			(evil-insert-state)))
+	(define-key vterm-mode-map [return]                      #'vterm-send-return)
+
+	(setq vterm-keymap-exceptions nil)
+  (setq multi-vterm-dedicated-window-height-percent 30)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-e")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-f")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-a")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-v")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-b")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-w")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-u")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-n")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-m")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-p")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-j")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-k")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-r")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-t")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-g")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-c")      #'vterm--self-insert)
+	(evil-define-key 'insert vterm-mode-map (kbd "C-SPC")    #'vterm--self-insert)
+	(evil-define-key 'normal vterm-mode-map (kbd "C-d")      #'vterm--self-insert)
+	(evil-define-key 'normal vterm-mode-map (kbd "i")        #'evil-insert-resume)
+	(evil-define-key 'normal vterm-mode-map (kbd "o")        #'evil-insert-resume)
+	(evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume)
+)
+#+end_src
+
 * Directory Cleaning
 
 ** Changing the location of the "custom file"
@@ -848,6 +920,7 @@ Saving auto save files, like =#Emacs.org#= in a dedicated diretory
 #+end_example
 
 ** Lock Files
+
 
 These are the files that look like =.#Emacs.org=. They appear when you have unsaved changes to a file in a buffer. Unfortunately these can’t be moved, but they can be disabled:
 
