@@ -21,6 +21,7 @@ keymap("n", "<C-l>", "<cmd> call VSCodeNotify('workbench.action.navigateRight') 
 -- Navigate buffers
 keymap("n", "<S-l>", "<cmd> call VSCodeNotify('workbench.action.nextEditor') <cr>", opts)
 keymap("n", "<S-h>", "<cmd> call VSCodeNotify('workbench.action.previousEditor') <cr>", opts)
+keymap("n", "<leader>r", "<cmd> call VSCodeNotify('editor.action.goToReferences') <cr>", opts)
 
 -- Stay in indent mode
 keymap("v", "<", "<gv", opts)
@@ -46,9 +47,9 @@ keymap("n", "<leader>g", "<cmd> call VSCodeNotify('workbench.action.findInFiles'
 -- Show VSCode commands
 keymap("n", "<leader>c", "<cmd> call VSCodeNotify('workbench.action.showCommands') <cr>", opts)
 
---[[ -- Code formating ]]
---[[ keymap("n", "<leader>p", ":Format<cr>", opts) ]]
-
 -- Buffers
 keymap("n", "<leader>v", "<cmd> call VSCodeNotify('workbench.action.splitEditorRight') <cr>", opts)
 keymap("n", "<leader>h", "<cmd> call VSCodeNotify('workbench.action.splitEditorDown') <cr>", opts)
+
+-- Select a block of code
+keymap("v", "im", "aBoV", opts)
